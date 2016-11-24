@@ -1,40 +1,72 @@
 <?php
     session_start();
+    
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
+    require_once ("config/config.php");
     $ergebnis = array();
     $true = 1;
 
-    try{
-
-      $pdo = new PDO('sqlite:anmeldung.sqlite3');
-
-      // set errormode to exception
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-      if(!isset($_SESSION['userid'])){
-        $name = $_POST['user'];
-        $passwd = $_POST['password'];
-
-        $stmt = $pdo->query("SELECT * FROM login where name='".$name."'");
-        $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC);
-      }
-
-      if($ergebnis !== false && $ergebnis['passwd'] == $passwd){
-          $_SESSION['userid'] = $ergebnis['name'];
-          die(header("Location:main.php"));
-      } elseif ($ergebnis['passwd'] !== $passwd){
-        $true = 0;
-      }
-      // if($user !== false && $passwd == $user['passwd']){
-      //   $_SESSION['userid'] = $user['name'];
-      //   die(header("Location:main.php"));
-      // }
 
 
-    } catch(PDOException $e){
-        echo "Anmeldung an Datenbank gescheitert. ".$e->getMessage();
-        die();
-      }
+if(isset($_POST['submit'])){
+  $name = $_POST['user'];
+  $passwd = $_POST['password']; 
+
+  $stmt = $pdo->query("SELECT * FROM login WHERE name = 'admin'");
+  $temp = $stmt->execute(array('name' => $name));
+  $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC);
+  print_r($ergebnis['passwd']."<br/>");
+  echo hash('sha512', $passwd.$salt);
+}
+
+
+  if($_POST['user'] == $ergebnis['name'] && hash('sha512', $passwd.$salt) == $ergebnis['passwd']){
+    $_SESSION['userid'] = $ergebnis['name'];
+     
+    die(header("Location:main.php"));
+
+  } elseif(isset($_POST['submit']) && hash('sha512',$passwd.$salt) !== $ergebnis['passwd']){
+    $true = 0;
+  } elseif(isset($_POST['submit']) && $name !== $ergebnis['name']){
+    $true = 2;
+  }
+  
+
+
+
+
+
+    // try{
+
+    //   $pdo = new PDO('sqlite:anmeldung.sqlite3');
+
+    //   // set errormode to exception
+    //   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    //   if(!isset($_SESSION['userid'])){
+    //     $name = $_POST['user'];
+    //     $passwd = $_POST['password'];
+
+    //     $stmt = $pdo->query("SELECT * FROM login where name='".$name."'");
+    //     $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC);
+    //   }
+
+    //   if($ergebnis !== false && $ergebnis['passwd'] == $passwd){
+    //       $_SESSION['userid'] = $ergebnis['name'];
+    //       die(header("Location:main.php"));
+    //   } elseif ($ergebnis['passwd'] !== $passwd){
+    //     $true = 0;
+    //   }
+    //   // if($user !== false && $passwd == $user['passwd']){
+    //   //   $_SESSION['userid'] = $user['name'];
+    //   //   die(header("Location:main.php"));
+    //   // }
+
+
+    // } catch(PDOException $e){
+    //     echo "Anmeldung an Datenbank gescheitert. ".$e->getMessage();
+    //     die();
+    //   }
 
     
 
@@ -82,15 +114,20 @@
     </div>
     </div>
     <?php
-      if ($true != 1){
+      if ($true == 0){
         echo '<div class="alert alert-danger col-md-4 col-xs-10 col-xs-offset-1 col-md-offset-4" role="alert">
               <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
                Fehler! Das Passwort war falsch!</div>';
       }
+      if ($true == 2){
+        echo '<div class="alert alert-danger col-md-4 col-xs-10 col-xs-offset-1 col-md-offset-4" role="alert">
+              <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
+               Fehler! Benutzername nicht gefunden!</div>';
+      }
     ?>
       <div class="row">
         <div class="col-md-4 col-xs-10 col-xs col-md-offset-4">
-      <form class="form-signin" action="index.php" method="post">
+      <form class="form-signin" action="" method="post">
         <h2 class="form-signin-heading schrift">Bitte Anmelden</h2>
         <label for="inputUser" class="sr-only">Benutzername</label>
         <input type="user" id="inputUser" class="form-control" placeholder="Benutzername" required="" autofocus="" name="user">
@@ -103,7 +140,7 @@
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
       </form>
       </div>
       </div>

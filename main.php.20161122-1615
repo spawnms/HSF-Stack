@@ -1,11 +1,8 @@
+
 <?php
     session_start();
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
-    if(!isset($_SESSION['userid'])){
-      header("Location:index.php");
-    }
-    $name1 = $_SESSION['userid'];
-    echo "<br/><br/><br/><br/>".$name1;
+    $name = $_SESSION['userid'];
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>HSF-Fulda Anmeldung</title>
+    <title>HSF-Fulda Anmeldung!</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -60,13 +57,13 @@
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Dashboard</a></li>
-            <li><a href="kurs.php">Kurs</a></li>
-            <li><a href="projekt.php">Projekt</a></li>
-            <li><a href="sicherheit.php">Sicherheit</a></li>
+            <li><a href="#">Kurs</a></li>
+            <li><a href="#">Projekt</a></li>
+            <li><a href="#">Sicherheit</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#"> <?php echo $name1 ?> <span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span></a></li>
+                <li><a href="#"> <?php echo $name ?> <span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span></a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
