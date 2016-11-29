@@ -1,11 +1,12 @@
 <?php
     session_start();
+   // include("config/function.php");
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     if(!isset($_SESSION['userid'])){
       header("Location:index.php");
     }
-    $name1 = $_SESSION['userid'];
-    echo "<br/><br/><br/><br/>".$name1;
+    $name = $_SESSION['userid'];
+  
 ?>
 
 <!DOCTYPE html>
@@ -66,13 +67,13 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#"> <?php echo $name1 ?> <span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span></a></li>
+                <li><a href="user/userverwaltung.php"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
-                <li><a href="index.php">Logout <?php setcookie("", time()-3600); session_destroy(); ?></a></li>
+                <li><a href="index.php">Logout </a></l
               </ul>
             </li> 
           </ul>

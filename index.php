@@ -3,6 +3,7 @@
     
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     require_once ("config/config.php");
+    //include ("config/function.php");
     $ergebnis = array();
     $true = 1;
 
@@ -12,63 +13,22 @@ if(isset($_POST['submit'])){
   $name = $_POST['user'];
   $passwd = $_POST['password']; 
 
-  $stmt = $pdo->query("SELECT * FROM login WHERE name = 'admin'");
-  $temp = $stmt->execute(array('name' => $name));
-  $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC);
-  print_r($ergebnis['passwd']."<br/>");
-  echo hash('sha512', $passwd.$salt);
+  $stmt = $pdo->prepare("SELECT * FROM login WHERE name = ?");
+  $stmt->execute(array($name));
+  $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC); 	
 }
 
 
   if($_POST['user'] == $ergebnis['name'] && hash('sha512', $passwd.$salt) == $ergebnis['passwd']){
     $_SESSION['userid'] = $ergebnis['name'];
-     
+    $_SESSION['rolle'] = $ergebnis['rolle'];
     die(header("Location:main.php"));
 
   } elseif(isset($_POST['submit']) && hash('sha512',$passwd.$salt) !== $ergebnis['passwd']){
     $true = 0;
   } elseif(isset($_POST['submit']) && $name !== $ergebnis['name']){
     $true = 2;
-  }
-  
-
-
-
-
-
-    // try{
-
-    //   $pdo = new PDO('sqlite:anmeldung.sqlite3');
-
-    //   // set errormode to exception
-    //   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    //   if(!isset($_SESSION['userid'])){
-    //     $name = $_POST['user'];
-    //     $passwd = $_POST['password'];
-
-    //     $stmt = $pdo->query("SELECT * FROM login where name='".$name."'");
-    //     $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC);
-    //   }
-
-    //   if($ergebnis !== false && $ergebnis['passwd'] == $passwd){
-    //       $_SESSION['userid'] = $ergebnis['name'];
-    //       die(header("Location:main.php"));
-    //   } elseif ($ergebnis['passwd'] !== $passwd){
-    //     $true = 0;
-    //   }
-    //   // if($user !== false && $passwd == $user['passwd']){
-    //   //   $_SESSION['userid'] = $user['name'];
-    //   //   die(header("Location:main.php"));
-    //   // }
-
-
-    // } catch(PDOException $e){
-    //     echo "Anmeldung an Datenbank gescheitert. ".$e->getMessage();
-    //     die();
-    //   }
-
-    
+  }   
 
 ?>
 
