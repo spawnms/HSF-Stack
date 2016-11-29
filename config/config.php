@@ -1,11 +1,11 @@
 <?php
 
 $dbserver	=	"localhost";
-$dbuser		=	"matthias";
-$dbpasswd	=	"birkE.88";
+$dbuser		=	"";
+$dbpasswd	=	"";
 $dbname		=	"HSF_Stack";
 
-$salt		=	'"=+C^1Jk<^J1PnK}2Sj-iqu=Req(3*^FIC2IzrtuI"=:ok?*6r';
+$salt		=	'';
 
 try{
 
