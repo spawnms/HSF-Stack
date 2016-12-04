@@ -7,15 +7,17 @@
     $ergebnis = array();
     $true = 1;
 
-
-
 if(isset($_POST['submit'])){
   $name = $_POST['user'];
   $passwd = $_POST['password']; 
 
   $stmt = $pdo->prepare("SELECT * FROM login WHERE name = ?");
   $stmt->execute(array($name));
-  $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC); 	
+  $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC); 
+
+  $datum = $pdo->prepare("UPDATE login SET llogin = NOW() WHERE name = ?");
+  $datum->execute(array($name));
+  	
 }
 
 
@@ -77,7 +79,7 @@ if(isset($_POST['submit'])){
       if ($true == 0){
         echo '<div class="alert alert-danger col-md-4 col-xs-10 col-xs-offset-1 col-md-offset-4" role="alert">
               <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
-               Fehler! Das Passwort war falsch!</div>';
+               Fehler! Benutzername / Passwort war falsch!</div>';
       }
       if ($true == 2){
         echo '<div class="alert alert-danger col-md-4 col-xs-10 col-xs-offset-1 col-md-offset-4" role="alert">
@@ -92,7 +94,7 @@ if(isset($_POST['submit'])){
         <label for="inputUser" class="sr-only">Benutzername</label>
         <input type="user" id="inputUser" class="form-control" placeholder="Benutzername" required="" autofocus="" name="user">
         <div class="platzhalter"></div>
-        <label for="inputPassword" class="sr-only">Password</label>
+        <label for="inputPassword" class="sr-only">Passwort</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
         <div class="platzhalter"></div>
         <!-- <div class="checkbox">

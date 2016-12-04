@@ -2,8 +2,30 @@
     session_start();
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     $name = $_SESSION['userid'];
-?>
 
+    $shell = shell_exec("python ../list_user.py");
+    $ausgabe = json_decode($shell);
+
+    $shell2 = shell_exec("python ../list_project.py");
+    $ausgabe2 = json_decode($shell2);
+
+    $ausnahmen = array('aodh','heat_admin','heat','swift','fuel_stats_user','cinder','ceilometer','murano','heat-cfn','neutron','nova','glance','glare');
+
+
+    // echo "Count ausgabe2: ".count($ausgabe2);
+    // echo "<br/>";
+    // print_r($ausgabe2);
+
+    // var_dump($ausgabe);
+    // echo "<br/><br/>";
+    // var_dump(key($ausgabe[0]));
+    // echo "<br/><br/>";
+    // echo $ausgabe[0]->ID;
+    // echo "<br/><br/>";
+    // echo $ausgabe[0]->Name;
+    // echo "<br/><br/>";
+    // echo "Count: ".count($ausgabe);
+    ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -96,35 +118,47 @@
             </div>
         </div>
       <div class="row">
-        <div class="col-md-11">
+        <div class="col-md-5 kurstabelle">
           <table class="table table-hover">
             <head>
                 <tr>
-                    <td>Kursname</td>
-                    <td>Gr&oumlsse</td>
-                    <td>Weitere Angaben</td>
-                    <td>Zugriffszeit</td>
+                    <td><strong>Benutzer</strong></td>
+                    <td><strong>ID</strong></td>
                 </tr>
             </head> 
             <body>
+            <?php
+              for($i = 0; $i < count($ausgabe);$i++){
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
+                echo "<tr>";
+                  echo "<td>".$ausgabe[$i]->Name."</td>";
+                  echo "<td>".$ausgabe[$i]->ID."</td>";
+                echo "</tr>";
+              }
+            }
+                ?>
+            </body>   
+          </table>
+        </div>
+         <div class="col-md-5 kurstabelle">
+          <table class="table table-hover">
+            <head>
                 <tr>
-                  <td>Kurs 1</td>
-                  <td>45</td>
-                  <td>Angabe 1</td>
-                  <td>08:00 - 20:00</td>
+                    <td><strong>Projekt</strong></td>
+                    <td><strong>ID</strong></td>
                 </tr>
-                <tr>
-                  <td>Kurs 2</td>
-                  <td>46</td>
-                  <td>Angabe 2</td>
-                  <td>12:00 - 13:00</td>
-                </tr>
-                <tr>
-                  <td>Kurs 3</td>
-                  <td>47</td>
-                  <td>Angabe 3</td>
-                  <td>21:30 - 06:45</td>
-                </tr>
+            </head> 
+            <body>
+            <?php
+              for($i = 0; $i < count($ausgabe);$i++){
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
+                echo "<tr>";
+                  echo "<td>".$ausgabe2[$i]->Name."</td>";
+                  echo "<td>".$ausgabe2[$i]->ID."</td>";
+                echo "</tr>";
+              }
+            }
+                ?>
             </body>   
           </table>
         </div>

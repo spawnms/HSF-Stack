@@ -4,32 +4,16 @@
     require_once ("../config/config.php");
     include ("../config/function.php");
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
-    if(!isset($_SESSION['userid'])){
-      header("Location:../index.php");
-    }
+    // if(!isset($_SESSION['userid'])){
+    //   header("Location:../index.php");
+    // }
     $name = $_SESSION['userid'];
 
     $stmt = $pdo->query("SELECT id, name, email, llogin, rolle FROM login");
     $userdaten = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
-    if(isset($_POST['action']))
-    {
-        $benutzername = $_POST['benutzername'];
-        if($_POST['benutzerpasswd'] === $_POST['benutzerpasswd_w']){
-            $benutzerpasswd = hash('sha512', $_POST['benutzerpasswd'].$salt);
-        }
-        if(checkmail($_POST['benutzeremail'])){
-            $benutzeremail = $_POST['benutzeremail'];
-        }
-        $rolle = $_POST['rolle'];
-    
-        echo "Name: ".$benutzername;
-        echo "<br/>";
-        echo "Passwort: ".$benutzerpasswd;
-        echo "<br/>";
-        echo "E-Mail: ".$benutzeremail;
-        echo "<br/>";
-        echo "Rolle: ".$rolle;
+    if(isset($_POST['benutzerid'])){
+      echo $_POST['benutzerid'];
     }
   
 ?>
@@ -46,6 +30,7 @@
     <!-- Bootstrap -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/meine.css" rel="stylesheet">
+    <script src="../js/jquery-3.1.1.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -86,9 +71,9 @@
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Dashboard</a></li>
-            <li><a href="kurs.php">Kurs</a></li>
-            <li><a href="projekt.php">Projekt</a></li>
-            <li><a href="sicherheit.php">Sicherheit</a></li>
+            <li><a href="../kurs.php">Kurs</a></li>
+            <li><a href="../projekt.php">Projekt</a></li>
+            <li><a href="../sicherheit.php">Sicherheit</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -98,7 +83,7 @@
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
-                <li><a href="index.php">Logout <?php setcookie("", time()-3600); session_destroy(); ?></a></li>
+                <li><a href="../index.php">Logout <?php setcookie("", time()-3600); session_destroy(); ?></a></li>
               </ul>
             </li> 
           </ul>
@@ -108,12 +93,12 @@
 
     <div class="container">
     <div class="row">
-      <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target=".neu-modal-lg">
+      <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluseradd">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>NEU</strong>
       </div>
         <!-- Modal NEU -->
-            <div class="modal fade neu-modal-lg" role="dialog" aria-labelledby="rasterSystemModalLabel">
-              <div class="modal-dialog" role="document">
+            <div class="modal fade" id="modaluseradd" role="dialog" aria-labelledby="rasterSystemModalLabel">
+              <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
@@ -123,7 +108,7 @@
                     <div class="container-fluid">
                       <div class="row">
                           <div class="col-md-8 col-sm-8">
-                        <form method="post" action="userverwaltung.php">
+                        <form class="formuseradd" method="post" action="../config/useradd.php">
                             <div class="form-group">
                                 <label for="Benutzname">Benutzername</label>
                                 <input type="user" name="benutzername" class="form-control" id="benutzername" autofocus="true" placeholder="Benutzername">
@@ -150,19 +135,105 @@
                     </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                    <button type="submit" name="speichern" class="btn btn-primary">Änderungen speichern</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-primary">Änderungen speichern</button>
                   </div>
                     </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
         <!-- Modal Neu Ende -->
+        <script type="text/javascript">
+          $(document).ready(function(){
+          $("#submit").click(function(){
+          var name = $("#benutzername").val();
+          var passwd = $("#benutzerpasswd").val();
+          var passwdrepeat = $("#benutzerpasswd_w").val();
+          var email = $("#benutzeremail").val();
+          var role = $("#rolle :selected").text();
+          var dataString = 'benutzername' + name + 'benutzerpasswd' + passwd + 'benutzerpasswd_w' + passwdrepeat + 'benutzeremail' + email + 'rolle' + role; 
+          $.ajax({
+            type: "POST",
+            url: "../config/useradd.php",
+            data: $("form.formuseradd").serialize(),
+            success: function(msg){
+              location.reload();
+              $("#modaluseradd").modal('hide');
+                console.log("Success: "+$("form.formuseradd").serialize());
+            },
+            error: function(){
+              alert("Fehler");
+                console.log("Error: "+$("form.formuseradd").serialize());
+            }
+          });
+          });
+          });
+        </script>
+        
       <div class="col-md-2 col-md-offset-2 titel">
         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <strong>BEARBEITEN</strong>
       </div>
-      <div class="col-md-2 col-md-offset-2 titel">
+      <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluserdelete">
         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> <strong>LÖSCHEN</strong>
       </div>
+<!-- Modal NEU -->
+            <div class="modal fade" id="modaluserdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="rasterSystemModalLabel">Benutzer l&ouml;schen</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      <div class="row">
+                          <div class="col-md-8 col-sm-8">
+                        <form class="formuserdelete" method="post" action="../config/userdel.php">
+                            <div class="form-group">
+                                <lable for="zu l&ouml;schenden Benutzer w&auml;hlen">zu l&ouml;schenden Benutzer w&auml;hlen</lable>
+                                <select class="form-control" name="benutzernamedelete">
+                                <?php
+                                        for($i = 0; $i < count($userdaten);$i++){
+                                            if($userdaten[$i]['name'] != $name){
+                                                echo "<option>".$userdaten[$i]['name']."</option>";
+                                        }
+                                    }
+                                ?>
+                            </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="Admin_Passwort">mit Admin Passwort bestätigen</label>
+                                <input type="password" name="adminpasswddelete" class="form-control" id="adminpasswddelete" placeholder="Passwort">
+                            </div>
+                        </form>
+                      </div>
+                     </div>
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                    <button type="submit" id="submitdelete" name="submitdelete" class="btn btn-primary">Änderungen speichern</button>
+                  </div>
+                    </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+<!-- Modal Neu Ende -->
+        <script type="text/javascript">
+          $(document).ready(function(){
+          $("#submitdelete").click(function(){
+          $.ajax({
+            type: "POST",
+            url: "../config/userdel.php",
+            data: $("form.formuserdelete").serialize(),
+            success: function(msg){
+              $("#modaluserdelete").modal('hide');
+            },
+            error: function(){
+              alert("Fehler");
+            }
+          });
+          });
+          });
+        </script>
       </div>
       <div class="row">
         <div class="col-md-11">
@@ -191,8 +262,7 @@
       </div>
     </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="../js/jquery-3.1.1.js"></script>
+    
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../js/bootstrap.min.js"></script>
   </body>
