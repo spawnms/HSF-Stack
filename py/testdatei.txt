@@ -1,0 +1,1 @@
+Auswahl: Benutzer, Name: regex1, Passwort: birkeBeschreibung: Das_wird_ein_kleiner_Test_der_zeigen_soll_wie_die_Leerzeichen_verschwinden.._RegEx_ist_super., Projekt: admin, SID: 

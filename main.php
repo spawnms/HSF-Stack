@@ -73,7 +73,7 @@
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
-                <li><a href="index.php">Logout </a></l
+                  <li><a href="index.php">Logout </a></l>
               </ul>
             </li> 
           </ul>
@@ -83,14 +83,16 @@
 
     <div class="container">
     <div class="row">
-      <div class="col-md-2 col-md-offset-2 titel">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>NEU</strong>
+       <div class="col-md-10">
+    <div class="col-md-2 col-md-offset-2 titel">
+  <button type="button" class="btn btn-success btn-block neu" data-toggle="modal" data-target="#modaluseradd" ><span class="glyphicon glyphicon-plus gl" aria-hidden="true"></span>NEU</button>
+  </div>
+      <div class="col-md-3 col-md-offset-1 titel">
+      <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
       </div>
-      <div class="col-md-2 col-md-offset-2 titel">
-        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <strong>BEARBEITEN</strong>
+      <div class="col-md-2 col-md-offset-1 titel">
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>l&ouml;schen</button>
       </div>
-      <div class="col-md-2 col-md-offset-2 titel">
-        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> <strong>LÖSCHEN</strong>
       </div>
       </div>
       <div class="row">

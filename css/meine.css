@@ -79,27 +79,27 @@ h2.schrift{
 /*################### main.php ################################*/
 /* Farbpalette: http://paletton.com/#uid=52G0Y0ko0tBeuGUjGxdsKq3uOky */
 
-.titel{
-  min-width: 250px;
-  text-align: center;
-  color:#ffffff;
-  border:1px solid grey;
-  border-radius: 5px;
-  padding: auto;
-  margin-right: 20px;
-  margin-left: 20px;
-  margin-bottom: 20px;
-  background-color: #305F9B;
-}
-
-.titel:hover{
-  background-color: #7599C8;
-  color:#FFF88C;
-}
-
 .table{
   margin-top: 50px;
 }
 
+.gl{
+  padding-right: 10px;
+}
 
+.btn-block{
+  padding-right: 25px;
+}
+
+.neu:hover{
+      color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.del:hover{
+      color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
+}
 /*#############################################################*/

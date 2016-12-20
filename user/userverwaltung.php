@@ -49,7 +49,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.php">HSF-Stack Userverwaltung</a>
+          <a class="navbar-brand" href="../main.php">HSF-Stack Userverwaltung</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <!-- <ul class="nav navbar-nav">
@@ -77,7 +77,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
+                <li><a href="userverwaltung.php"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
@@ -93,9 +93,13 @@
 
     <div class="container">
     <div class="row">
-      <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluseradd">
+    <div class="col-md-10">
+    <div class="col-md-2 col-md-offset-2 titel">
+	<button type="button" class="btn btn-success btn-block neu" data-toggle="modal" data-target="#modaluseradd" ><span class="glyphicon glyphicon-plus gl" aria-hidden="true"></span>NEU</button>
+  </div>
+     <!-- <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluseradd">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>NEU</strong>
-      </div>
+      </div>-->
         <!-- Modal NEU -->
             <div class="modal fade" id="modaluseradd" role="dialog" aria-labelledby="rasterSystemModalLabel">
               <div class="modal-dialog modal-lg" role="document">
@@ -169,12 +173,16 @@
           });
         </script>
         
-      <div class="col-md-2 col-md-offset-2 titel">
-        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <strong>BEARBEITEN</strong>
+      <div class="col-md-3 col-md-offset-1 titel">
+      <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
+        
       </div>
-      <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluserdelete">
+      <div class="col-md-2 col-md-offset-1 titel">
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>l&ouml;schen</button>
+      </div>
+     <!-- <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluserdelete">
         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> <strong>LÖSCHEN</strong>
-      </div>
+      </div> -->
 <!-- Modal NEU -->
             <div class="modal fade" id="modaluserdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
               <div class="modal-dialog modal-lg" role="document">
@@ -234,6 +242,7 @@
           });
           });
         </script>
+      </div>
       </div>
       <div class="row">
         <div class="col-md-11">
