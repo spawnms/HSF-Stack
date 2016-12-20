@@ -286,31 +286,31 @@
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&ouml;SCHEN</button>
       </div>
           <div class="modal fade" id="userdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times</span></button>
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times</span></button>
                     <h4 class="modal-title" id="rasterSystemModalLabel">OpenStack Kurs l&ouml;schen</h4>
-                  </div>
-                  <div class="modal-body">
-                    <div class="container-fluid">
-                      <div class="row">
-                          <div class="col-md-8 col-sm-8">
-                        <form class="deleteuser" method="post" action="../py/deletekurs.php">
-                            
+                </div>
+                <div class="modal-body">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-md-8 col-sm-8">
+                        <form class="deletecourse" method="post" action="../py/deletecourse.php">
+                          
                         </form>
                       </div>
                       <div id="bingo"></div>
-                     </div>
                     </div>
+                  </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
                     <button type="submit" id="submit" name="submit" class="btn btn-primary">Änderungen speichern</button>
                   </div>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
       </div>
         <div class="modal fade bearbeiten-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Kurs bearbeiten">
             <div class="modal-dialog modal-lg">
@@ -332,8 +332,8 @@
             </head> 
             <body>
             <?php
-              for($i = 0; $i < count($ausgabe);$i++){
-                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
+              for($i = 0; $i < count($ausgabe);$i++) {
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))) {
                     echo "
                         <tr>
                            <td>".$ausgabe[$i]->Name."</td>
