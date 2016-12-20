@@ -3,10 +3,10 @@
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     $name = $_SESSION['userid'];
 
-    $shell = shell_exec("python ../../list_user.py");
+    $shell = shell_exec("python ../list_user.py");
     $ausgabe = json_decode($shell);
 
-    $shell2 = shell_exec("python ../../list_project.py");
+    $shell2 = shell_exec("python ../list_project.py");
     $ausgabe2 = json_decode($shell2);
 
     $ausnahmen = array('admin', 'services', 'aodh','heat_admin','heat','swift','fuel_stats_user','cinder','ceilometer','murano','heat-cfn','neutron','nova','glance','glare');
@@ -128,8 +128,7 @@
                         </div>
                             <div class="form-group benutzername">
                                 <label id="labela" for="Benutzname">Benutzername</label>
-                                <input type="text" name="benutzername" class="form-control" id="benutzername" 
-                                autofocus="true" placeholder="Benutzername" >
+                                <input type="user" name="benutzername" class="form-control" id="benutzername" autofocus="true" placeholder="Benutzername">
                             </div>
                             <div class="form-group benutzerpasswd">
                                 <label for="Benutzerpasswd">Passwort</label>
@@ -175,16 +174,9 @@
               }
               else {
                 $("#labela").text("Projekt");
-                //$(".benutzername").addClass("col-xs-6");
-                $(".benutzername").after('<div class="form-group postfix"> <label id="label" for="postfix">Postfix</label> <input type="text" name="postfix" class="form-control" id="postfix" autofocus="true" placeholder="postfix" >');
-                $(".postfix").after('<div class="form-group anzahl"> <label id="label" for="anzahl">Anzahl</label> <input type="number" name="anzahl" class="form-control" id="anzahl" autofocus="true" placeholder="anzahl" >')
-                $(".benutzerpasswd").remove();
-        				//$("div.benutzerpasswd").css('visibility','hidden');
-                $(".beschreibung").remove();
-        				//$(".beschreibung").css('visibility','hidden');
-                $(".projekt").remove();
-        				//$(".projekt").css('visibility','hidden');
-
+				$(".benutzerpasswd").css('visibility','hidden');
+				$(".beschreibung").css('visibility','hidden');
+				$(".projekt").css('visibility','hidden');
               }
             })
             .trigger("change");
@@ -265,8 +257,34 @@
       </div>
 
       <div class="col-md-2 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>l&ouml;schen</button>
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&ouml;SCHEN</button>
       </div>
+          <div class="modal fade" id="userdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times</span></button>
+                    <h4 class="modal-title" id="rasterSystemModalLabel">OpenStack Kurs l&ouml;schen</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      <div class="row">
+                          <div class="col-md-8 col-sm-8">
+                        <form class="deleteuser" method="post" action="../py/deletekurs.php">
+                            
+                        </form>
+                      </div>
+                      <div id="bingo"></div>
+                     </div>
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-primary">Änderungen speichern</button>
+                  </div>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
       </div>
         <div class="modal fade bearbeiten-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Kurs bearbeiten">
             <div class="modal-dialog modal-lg">
@@ -281,21 +299,29 @@
           <table class="table table-hover">
             <head>
                 <tr>
-                    <td><strong>Benutzer</strong></td>
-                    <td><strong>ID</strong></td>
+                    <th>Benutzer</th>
+                    <th>ID</th>
+                    <th></th>
                 </tr>
             </head> 
             <body>
             <?php
               for($i = 0; $i < count($ausgabe);$i++){
                 if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
-                echo "<tr>";
-                  echo "<td>".$ausgabe[$i]->Name."</td>";
-                  echo "<td>".$ausgabe[$i]->ID."</td>";
-                echo "</tr>";
+                    echo "
+                        <tr>
+                           <td>".$ausgabe[$i]->Name."</td>
+                           <td>".$ausgabe[$i]->ID."</td>
+                           <td>
+                               <button type=\"button\" class=\"btn btn-default\">
+                                <span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span>
+                               </button>
+                           </td>
+                        </tr>
+                        ";
+                }
               }
-            }
-                ?>
+            ?>
             </body>   
           </table>
         </div>
@@ -303,18 +329,24 @@
           <table class="table table-hover">
             <head>
                 <tr>
-                    <td><strong>Projekt</strong></td>
-                    <td><strong>ID</strong></td>
+                    <th>Projekt</th>
+                    <th>ID</th>
+                    <th></th>
                 </tr>
             </head> 
             <body>
             <?php
               for($i = 0; $i < count($ausgabe2);$i++){
                 if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
-                echo "<tr>";
-                  echo "<td>".$ausgabe2[$i]->Name."</td>";
-                  echo "<td>".$ausgabe2[$i]->ID."</td>";
-                echo "</tr>";
+                echo "<tr>
+                   <td>".$ausgabe2[$i]->Name."</td>
+                   <td>".$ausgabe2[$i]->ID."</td>
+                   <td>
+                    <button type=\"button\" class=\"btn btn-default\">
+                        <span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span>
+                    </button>
+                   </td>
+                 </tr>";
               }
             }
                 ?>
@@ -324,6 +356,8 @@
       </div>
     </div>
 
+      
+      
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery-3.1.1.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
