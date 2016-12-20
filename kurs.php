@@ -3,10 +3,10 @@
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     $name = $_SESSION['userid'];
 
-    $shell = shell_exec("python ../list_user.py");
+    $shell = shell_exec("python ../../list_user.py");
     $ausgabe = json_decode($shell);
 
-    $shell2 = shell_exec("python ../list_project.py");
+    $shell2 = shell_exec("python ../../list_project.py");
     $ausgabe2 = json_decode($shell2);
 
     $ausnahmen = array('admin', 'services', 'aodh','heat_admin','heat','swift','fuel_stats_user','cinder','ceilometer','murano','heat-cfn','neutron','nova','glance','glare');
