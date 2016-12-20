@@ -174,9 +174,15 @@
               }
               else {
                 $("#labela").text("Projekt");
-				$(".benutzerpasswd").css('visibility','hidden');
-				$(".beschreibung").css('visibility','hidden');
-				$(".projekt").css('visibility','hidden');
+                //$(".benutzername").addClass("col-xs-6");
+                $(".benutzername").after('<div class="form-group postfix"> <label id="label" for="postfix">Postfix</label> <input type="text" name="postfix" class="form-control" id="postfix" autofocus="true" placeholder="postfix" >');
+                $(".postfix").after('<div class="form-group anzahl"> <label id="label" for="anzahl">Anzahl</label> <input type="number" name="anzahl" class="form-control" id="anzahl" autofocus="true" placeholder="anzahl" >')
+                $(".benutzerpasswd").remove();
+        				//$("div.benutzerpasswd").css('visibility','hidden');
+                $(".beschreibung").remove();
+        				//$(".beschreibung").css('visibility','hidden');
+                $(".projekt").remove();
+        				//$(".projekt").css('visibility','hidden');
               }
             })
             .trigger("change");
