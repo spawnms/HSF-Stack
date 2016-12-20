@@ -117,7 +117,7 @@
                   <div class="modal-body">
                     <div class="container-fluid">
                       <div class="row">
-                          <div class="col-md-8 col-sm-8">
+                          <div class="col-md-7 col-sm-7">
                         <form class="createuser" method="post" action="../py/createuser.php">
                         <div class="form-group">
                           <lable for="Auswahl">Benutzer/Projekt anlegen</lable>
@@ -151,7 +151,27 @@
                         </form>
                       </div>
                       <div id="bingo"></div>
+                      <div class="col-xs-4">
+                     	<div class="checkbox" value="network">
+						    <label>
+						      <input type="checkbox"> Default Netzwerk
+						    </label>
+					  	</div>
+					  	<div class="checkbox disabled">
+						  <label>
+						    <input type="checkbox" value="router">
+						    Default Router
+						  </label>
+						</div>
+						<div class="checkbox disabled">
+						  <label>
+						    <input type="checkbox" value="storage">
+						    Default Storage
+						  </label>
+						</div>
+					  	</div>
                      </div>
+                    
                     </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
