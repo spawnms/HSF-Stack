@@ -339,7 +339,7 @@
                            <td>".$ausgabe[$i]->Name."</td>
                            <td>".$ausgabe[$i]->ID."</td>
                            <td>
-                               <button type=\"button\" class=\"btn btn-default\">
+                               <button type=\"button\" class=\"btn btn-default muelleimer\">
                                 <span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span>
                                </button>
                            </td>
@@ -368,7 +368,7 @@
                    <td>".$ausgabe2[$i]->Name."</td>
                    <td>".$ausgabe2[$i]->ID."</td>
                    <td>
-                    <button type=\"button\" class=\"btn btn-default\">
+                    <button type=\"button\" class=\"btn btn-default muelleimer\">
                         <span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span>
                     </button>
                    </td>

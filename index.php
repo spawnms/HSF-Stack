@@ -95,14 +95,14 @@ if(isset($_POST['submit'])){
         <input type="user" id="inputUser" class="form-control" placeholder="Benutzername" required="" autofocus="" name="user">
         <div class="platzhalter"></div>
         <label for="inputPassword" class="sr-only">Passwort</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" required="" name="password">
         <div class="platzhalter"></div>
         <!-- <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Anmelden</button>
       </form>
       </div>
       </div>
