@@ -151,25 +151,7 @@
                         </form>
                       </div>
                       <div id="bingo"></div>
-                      <div class="col-xs-4">
-                     	<div class="checkbox" value="network">
-						    <label>
-						      <input type="checkbox"> Default Netzwerk
-						    </label>
-					  	</div>
-					  	<div class="checkbox disabled">
-						  <label>
-						    <input type="checkbox" value="router">
-						    Default Router
-						  </label>
-						</div>
-						<div class="checkbox disabled">
-						  <label>
-						    <input type="checkbox" value="storage">
-						    Default Storage
-						  </label>
-						</div>
-					  	</div>
+                      
                      </div>
                     
                     </div>
@@ -184,8 +166,8 @@
         <!-- Modal Neu Ende -->
         <script type="text/javascript">
           $(document).ready(function(){
+            var str = "";
             $("#auswahl").change(function(){
-              var str = "";
               $("#auswahl option:selected").each(function(){
                 str += $(this).text() + " ";
               });
@@ -203,18 +185,34 @@
         				//$(".beschreibung").css('visibility','hidden');
                 $(".projekt").remove();
         				//$(".projekt").css('visibility','hidden');
+                $("#bingo").after('<div class="col-xs-4"> <div class="checkbox disabled"><label><input type="checkbox" id="netzwerk"> Default Netzwerk </label></div> <div class="checkbox disabled"><label> <input type="checkbox" value="router" id="router">Default Router</label></div><div class="checkbox disabled"><label><input type="checkbox" value="storage" id="storage">Default Storage</label></div></div>');
               }
             })
             .trigger("change");
           $("#submit").click(function(){
-
           var auswahl = $("#auswahl").val();
           var name = $("#benutzername").val();
           var passwd = $("#benutzerpasswd").val();
           var beschreibung = $("#beschreibung").val();
           var projekt = $("#projekt").val();
-          var test = ("<?php echo session_id(); ?>");
+          var sid = ("<?php echo session_id(); ?>");
+          var postfix = $("#postfix").val();
+          var anzahl = $("#anzahl").val();
+          var netzwerk = "false";
+          var router = "false";
+          var storage = "false";
+          if ($("#netzwerk").is(':checked')){
+            netzwerk = "true";
+          }
 
+          if($("#router").is(":checked")){
+            router = "true";
+          }
+
+          if($("#storage").is(":checked")){
+            storage = "true";
+          }
+          if(str=="Benutzer "){
           $.ajax({
             type: "POST",
             url: "py/createuser.php",
@@ -224,18 +222,39 @@
                     benutzerpasswd: passwd,
                     beschreibung: beschreibung.replace(/\s/g,"_"),
                     projekt: projekt,
-                    sid : test
+                    sid : sid,
             },
             success: function(msg){
               location.reload();
-              console.log($("form.createuser").serialize());
-              console.log(regex);
               $("#createuser").modal('hide');
             },
             error: function(){
               alert("Fehler");
             }
           });
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "py/createproject.php",
+            data : {
+                    auswahl : auswahl,
+                    benutzername : name,
+                    postfix : postfix,
+                    anzahl : anzahl,
+                    netzwerk : netzwerk,
+                    router : router,
+                    storage : storage,
+                    sid : sid,
+            },
+            success: function(msg){
+              location.reload();
+              $("#createuser").modal('hide');
+            },
+            error: function(){
+              alert("Fehler");
+            }
+          });
+        }
           });
           });
         </script>
