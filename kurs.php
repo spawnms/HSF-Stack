@@ -3,10 +3,10 @@
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     $name = $_SESSION['userid'];
 
-    $shell = shell_exec("python ../../list_user.py");
+    $shell = shell_exec("python py/list_user.py");
     $ausgabe = json_decode($shell);
 
-    $shell2 = shell_exec("python ../../list_project.py");
+    $shell2 = shell_exec("python py/list_project.py");
     $ausgabe2 = json_decode($shell2);
 
     $ausnahmen = array('admin', 'services', 'aodh','heat_admin','heat','swift','fuel_stats_user','cinder','ceilometer','murano','heat-cfn','neutron','nova','glance','glare');
@@ -25,6 +25,7 @@
     // echo $ausgabe[0]->Name;
     // echo "<br/><br/>";
     // echo "Count: ".count($ausgabe);
+    session_write_close();
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +40,9 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/meine.css" rel="stylesheet">
     <script src="js/jquery-3.1.1.js"></script>
+     <script src="js/remove_project_id.js"></script>
+     <script src="js/remove_user_id.js"></script>
+     <script src="js/create_user_project.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -57,7 +61,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.php">HSF-Stack</a>
+          <a class="navbar-brand" href="main.php">HSF-Stack</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <!-- <ul class="nav navbar-nav">
@@ -143,7 +147,9 @@
                                  <?php
                                   for($i = 0; $i < count($ausgabe2);$i++)
                                   {
+                                    if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))) {
                                     echo "<option>".$ausgabe2[$i]->Name."</option>";
+                                  }
                                   }
                                  ?>
                                </select>
@@ -164,138 +170,7 @@
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
         <!-- Modal Neu Ende -->
-        <script type="text/javascript">
-          $(document).ready(function(){
-            var str = "";
-            $("#auswahl").change(function(){
-              $("#auswahl option:selected").each(function(){
-                str += $(this).text() + " ";
-              });
-              if(str === "Benutzer "){
-              $("#labela").text("Benutzer");
-              }
-              else {
-                $("#labela").text("Projekt");
-                //$(".benutzername").addClass("col-xs-6");
-                $(".benutzername").after('<div class="form-group postfix"> <label id="label" for="postfix">Postfix</label> <input type="text" name="postfix" class="form-control" id="postfix" autofocus="true" placeholder="postfix" >');
-                $(".postfix").after('<div class="form-group anzahl"> <label id="label" for="anzahl">Anzahl</label> <input type="number" name="anzahl" class="form-control" id="anzahl" autofocus="true" placeholder="anzahl" >')
-                $(".benutzerpasswd").remove();
-        				//$("div.benutzerpasswd").css('visibility','hidden');
-                $(".beschreibung").remove();
-        				//$(".beschreibung").css('visibility','hidden');
-                $(".projekt").remove();
-        				//$(".projekt").css('visibility','hidden');
-                $("#bingo").after('<div class="col-xs-4"> <div class="checkbox disabled"><label><input type="checkbox" id="netzwerk"> Default Netzwerk </label></div> <div class="checkbox disabled"><label> <input type="checkbox" value="router" id="router">Default Router</label></div><div class="checkbox disabled"><label><input type="checkbox" value="storage" id="storage">Default Storage</label></div></div>');
-              }
-            })
-            .trigger("change");
-          $("#submit").click(function(){
-          var auswahl = $("#auswahl").val();
-          var name = $("#benutzername").val();
-          var passwd = $("#benutzerpasswd").val();
-          var beschreibung = $("#beschreibung").val();
-          var projekt = $("#projekt").val();
-          var sid = ("<?php echo session_id(); ?>");
-          var postfix = $("#postfix").val();
-          var anzahl = $("#anzahl").val();
-          var netzwerk = "false";
-          var router = "false";
-          var storage = "false";
-          if ($("#netzwerk").is(':checked')){
-            netzwerk = "true";
-          }
 
-          if($("#router").is(":checked")){
-            router = "true";
-          }
-
-          if($("#storage").is(":checked")){
-            storage = "true";
-          }
-          if(str=="Benutzer "){
-          $.ajax({
-            type: "POST",
-            url: "py/createuser.php",
-            data : {
-                    auswahl : auswahl,
-                    benutzername : name,
-                    benutzerpasswd: passwd,
-                    beschreibung: beschreibung.replace(/\s/g,"_"),
-                    projekt: projekt,
-                    sid : sid,
-            },
-            success: function(msg){
-              location.reload();
-              $("#createuser").modal('hide');
-            },
-            error: function(){
-              alert("Fehler");
-            }
-          });
-        } else {
-          $.ajax({
-            type: "POST",
-            url: "py/createproject.php",
-            data : {
-                    auswahl : auswahl,
-                    benutzername : name,
-                    postfix : postfix,
-                    anzahl : anzahl,
-                    netzwerk : netzwerk,
-                    router : router,
-                    storage : storage,
-                    sid : sid,
-            },
-            success: function(msg){
-              location.reload();
-              $("#createuser").modal('hide');
-            },
-            error: function(){
-              alert("Fehler");
-            }
-          });
-        }
-          });
-          });
-        </script>
-
-       <!--  <script>
-
-        $(document).ready(function(){
-          $("#submit").click(function(){
-            // var name = $("#benutzername").val();
-            // var passwd = $("#benutzerpasswd").val();
-            // var beschreibung = $("#beschreibung").val();
-            // var anzahl = $("#Anzahl").val();
-            // var sid = "<php echo session_id(); ?>";
-            var data = {
-                        "benutzername":$("#benutzername").val(),
-                        "benutzerpasswd":$("#benutzerpasswd").val(),
-                        "beschreibung": $("#beschreibung").val(),
-                        "anzahl":$("#anzahl").val()
-                        //"sid":"<php echo session_id(); ?>"
-            };
-            data = $(this).serialize();
-          $.ajax({
-            url:          'py/createuser.php',
-            dataType:     'json',
-            type:         'POST',
-            contentType:  'application/json',
-            data:         data,
-            processData:  false,
-            success: function(data, textStatus, jQxhr){
-                      $("#bingo").html(JSON.stringify(data));
-                      console.log(data);
-                     },
-            error:   function(jqXhr, textStatus, errorThrown){
-                      console.log(errorThrown);
-                      console.warn(jqXhr.responseText);
-                     },
-            });
-          });
-        });
-
-        </script> -->
 <!-- ##################################################################################################################################### -->
       <div class="col-md-3 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
@@ -353,19 +228,18 @@
             <?php
               for($i = 0; $i < count($ausgabe);$i++) {
                 if(!(in_array($ausgabe[$i]->Name,$ausnahmen))) {
-                    echo "
+                    echo '
                         <tr>
-                           <td>".$ausgabe[$i]->Name."</td>
-                           <td>".$ausgabe[$i]->ID."</td>
+                           <td>'.$ausgabe[$i]->Name.'</td>
+                           <td>'.$ausgabe[$i]->ID.'</td>
                            <td>
-                               <button type=\"button\" class=\"btn btn-default muelleimer\">
-                                <span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span>
+                               <button type="button" class="btn btn-default muelleimer user" id="'.$ausgabe[$i]->ID.'">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                </button>
                            </td>
-                        </tr>
-                        ";
-                }
+                        </tr>';
               }
+            }
             ?>
             </body>   
           </table>
@@ -383,15 +257,15 @@
             <?php
               for($i = 0; $i < count($ausgabe2);$i++){
                 if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
-                echo "<tr>
-                   <td>".$ausgabe2[$i]->Name."</td>
-                   <td>".$ausgabe2[$i]->ID."</td>
+                echo '<tr>
+                   <td>'.$ausgabe2[$i]->Name.'</td>
+                   <td>'.$ausgabe2[$i]->ID.'</td>
                    <td>
-                    <button type=\"button\" class=\"btn btn-default muelleimer\">
-                        <span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span>
+                    <button type="button" class="btn btn-default muelleimer project" id="'.$ausgabe2[$i]->ID.'">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                     </button>
                    </td>
-                 </tr>";
+                 </tr>';
               }
             }
                 ?>

@@ -86,6 +86,7 @@ if(isset($_POST['submit'])){
               <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
                Fehler! Benutzername nicht gefunden!</div>';
       }
+      session_write_close();
     ?>
       <div class="row">
         <div class="col-md-4 col-xs-10 col-xs col-md-offset-4">

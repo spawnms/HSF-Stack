@@ -6,7 +6,13 @@
       header("Location:index.php");
     }
     $name = $_SESSION['userid'];
-  
+
+    $shell = shell_exec("python py/list_project.py");
+    $ausgabe = json_decode($shell);
+    $ausnahmen = array('admin', 'services');
+
+
+  session_write_close();
 ?>
 
 <!DOCTYPE html>
@@ -100,31 +106,30 @@
           <table class="table table-hover">
             <head>
                 <tr>
-                    <td>Kursname</td>
-                    <td>Gr&oumlsse</td>
-                    <td>Weitere Angaben</td>
-                    <td>Zugriffszeit</td>
+                    <th>Kursname</th>
+                   <!-- <th>Gr&oumlsse</th> -->
+                    <th>ist aktiv</th>
+                    <th>Zugriffszeit</th>
                 </tr>
             </head> 
             <body>
-                <tr>
-                  <td>Kurs 1</td>
-                  <td>45</td>
-                  <td>Angabe 1</td>
-                  <td>08:00 - 20:00</td>
-                </tr>
-                <tr>
-                  <td>Kurs 2</td>
-                  <td>46</td>
-                  <td>Angabe 2</td>
-                  <td>12:00 - 13:00</td>
-                </tr>
-                <tr>
-                  <td>Kurs 3</td>
-                  <td>47</td>
-                  <td>Angabe 3</td>
-                  <td>21:30 - 06:45</td>
-                </tr>
+                <?php
+              for($i = 0; $i < count($ausgabe);$i++){
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
+                echo '<tr>
+                      <td>'.$ausgabe[$i]->Name.'</td>';
+                   if($ausgabe[$i]->Enabled == 'true'){
+                echo '<td><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>';
+              } else {
+                echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>';
+              }
+                echo   '<td>
+                    
+                   </td>
+                 </tr>';
+              }
+              }
+                ?>
             </body>   
           </table>
         </div>

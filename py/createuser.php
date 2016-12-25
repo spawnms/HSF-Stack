@@ -21,4 +21,5 @@ fclose($test);
 if($auswahl === "Benutzer"){
 	$output2 = shell_exec("python createuser.py $name $password $description $projekt");
 }
+session_write_close();
 ?>

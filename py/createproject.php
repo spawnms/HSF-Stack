@@ -21,4 +21,5 @@ fclose($test);
 if($auswahl === "Projekt"){
 	$output2 = shell_exec("python kursanlegen.py $name $postfix $anzahl $netzwerk $router"); //$storage muss dann noch eingefügt werden
 }
+session_write_close();
 ?>

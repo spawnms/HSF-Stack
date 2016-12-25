@@ -15,7 +15,7 @@
     if(isset($_POST['benutzerid'])){
       echo $_POST['benutzerid'];
     }
-  
+  session_write_close();
 ?>
 
 <!DOCTYPE html>
@@ -162,11 +162,9 @@
             success: function(msg){
               location.reload();
               $("#modaluseradd").modal('hide');
-                console.log("Success: "+$("form.formuseradd").serialize());
             },
             error: function(){
-              alert("Fehler");
-                console.log("Error: "+$("form.formuseradd").serialize());
+              alert("Ein Fehler ist aufgetreten.");
             }
           });
           });
@@ -249,10 +247,10 @@
           <table class="table table-hover table-striped">
             <head>
                 <tr>
-                    <td>Benutzer</td>
-                    <td>E-Mail</td>
-                    <td>zuletzt angemeldet</td>
-                    <td>Rolle</td>
+                    <th>Benutzer</th>
+                    <th>E-Mail</th>
+                    <th>zuletzt angemeldet</th>
+                    <th>Rolle</th>
                 </tr>
             </head> 
             <body>

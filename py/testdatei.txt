@@ -1,2 +1,1 @@
-Projekt anlegen:  
-Auswahl: Projekt, Name: Matti, Postfix: Testkurs, Anzahl: 3, Netzwerk: false, Router: false, Storage: false, SID: 
+Projekt-ID: e171fc04e0104863a035dcc00bec0d10, SID: ostfix: Test, Anzahl: 3, Netzwerk: false, Router: false, Storage: false, SID:  SID: , SID: 
