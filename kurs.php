@@ -61,7 +61,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.php">HSF-Stack</a>
+          <a class="navbar-brand" href="main.php">HSF-Stack Kursverwaltung</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <!-- <ul class="nav navbar-nav">
@@ -177,7 +177,7 @@
       </div>
 
       <div class="col-md-2 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&ouml;SCHEN</button>
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
           <div class="modal fade" id="userdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
             <div class="modal-dialog modal-lg" role="document">

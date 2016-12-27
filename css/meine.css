@@ -76,6 +76,8 @@ h2.schrift{
 .platzhalter {
   margin-top:5px;
 }
+
+
 /*################### main.php ################################*/
 /* Farbpalette: http://paletton.com/#uid=52G0Y0ko0tBeuGUjGxdsKq3uOky */
 
@@ -115,5 +117,13 @@ background-color:#f5f5f5;
 border-color:;
 color:#333;
 }
+/*##############################################################*/
+
+/*#################### userverwaltung.php#######################*/
 
 
+.alert{
+  text-align: center;
+}
+
+/*##############################################################*/

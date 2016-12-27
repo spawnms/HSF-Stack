@@ -12,9 +12,14 @@
     $stmt = $pdo->query("SELECT id, name, email, llogin, rolle FROM login");
     $userdaten = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
-    if(isset($_POST['benutzerid'])){
-      echo $_POST['benutzerid'];
-    }
+    $dbrolle = $pdo->prepare("SELECT rolle FROM login WHERE name = ?");
+    $dbrolle->execute(array($name));
+    $rolle = $dbrolle->fetch(PDO::FETCH_ASSOC);
+
+    // if(isset($_POST['benutzerid'])){
+    //   echo $_POST['benutzerid'];
+    // }
+
   session_write_close();
 ?>
 
@@ -111,7 +116,7 @@
                   <div class="modal-body">
                     <div class="container-fluid">
                       <div class="row">
-                          <div class="col-md-8 col-sm-8">
+                          <div class="col-md-8 col-sm-8 afteruseradd">
                         <form class="formuseradd" method="post" action="../config/useradd.php">
                             <div class="form-group">
                                 <label for="Benutzname">Benutzername</label>
@@ -129,10 +134,13 @@
                                 <label for="E-Mail">E-Mail</label>
                                 <input type="email" name="benutzeremail" class="form-control" id="benutzeremail" placeholder="E-mail">
                             </div>
+                            <div class="form-group">
+                            <label for="Rolle waehlen">Rolle w&auml;hlen</label>
                             <select class="form-control" name="rolle">
                                 <option>Admin</option>
                                 <option>Benutzer</option>
                             </select>
+                            </div>
                         </form>
                       </div>
                      </div>
@@ -148,6 +156,17 @@
         <!-- Modal Neu Ende -->
         <script type="text/javascript">
           $(document).ready(function(){
+            var count = 0;
+             $(".neu").click(function(){
+                var id = $('.formuserdelete').attr('id');
+                console.log(id);
+                if(id == 'Benutzer' && count == 0){
+                  count += 1;
+                  $(".formuseradd").remove();
+                  $("#submit").remove();
+                  $(".afteruseradd").after('<div class="col-md-6 col-md-offset-3"><div class="alert alert-danger" role="alert"><span class="sr-only">Fehler:</span>Sie sind nicht als Administrator angemeldet.<br/>Nur Administratoren dürfen Benutzer anlegen.</div></div>');
+                }
+             });
           $("#submit").click(function(){
           var name = $("#benutzername").val();
           var passwd = $("#benutzerpasswd").val();
@@ -176,7 +195,7 @@
         
       </div>
       <div class="col-md-2 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>l&ouml;schen</button>
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
      <!-- <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluserdelete">
         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> <strong>LÖSCHEN</strong>
@@ -192,14 +211,14 @@
                   <div class="modal-body">
                     <div class="container-fluid">
                       <div class="row">
-                          <div class="col-md-8 col-sm-8">
-                        <form class="formuserdelete" method="post" action="../config/userdel.php">
+                          <div class="col-md-8 col-sm-8 afterform">
+                        <form class="formuserdelete" method="post" action="../config/userdel.php" id="<?php echo $rolle['rolle']; ?>">
                             <div class="form-group">
                                 <lable for="zu l&ouml;schenden Benutzer w&auml;hlen">zu l&ouml;schenden Benutzer w&auml;hlen</lable>
                                 <select class="form-control" name="benutzernamedelete">
                                 <?php
                                         for($i = 0; $i < count($userdaten);$i++){
-                                            if($userdaten[$i]['name'] != $name){
+                                            if($userdaten[$i]['name'] != $name && $userdaten[$i]['name'] != 'admin'){
                                                 echo "<option>".$userdaten[$i]['name']."</option>";
                                         }
                                     }
@@ -225,6 +244,16 @@
 <!-- Modal Neu Ende -->
         <script type="text/javascript">
           $(document).ready(function(){
+            var count = 0;
+             $(".del").click(function(){
+                var id = $('.formuserdelete').attr('id');
+                if(id == 'Benutzer' && count == 0){
+                  count += 1;
+                  $(".formuserdelete").remove();
+                  $("#submitdelete").remove();
+                  $(".afterform").after('<div class="col-md-6 col-md-offset-3"><div class="alert alert-danger" role="alert"><span class="sr-only">Fehler:</span>Sie sind nicht als Administrator angemeldet.<br/>Nur Administratoren dürfen Benutzer löschen.</div></div>');
+                }
+             });
           $("#submitdelete").click(function(){
           $.ajax({
             type: "POST",

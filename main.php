@@ -45,7 +45,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.php">HSF-Stack</a>
+          <a class="navbar-brand" href="main.php">HSF-Stack</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <!-- <ul class="nav navbar-nav">
@@ -97,7 +97,7 @@
       <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
       </div>
       <div class="col-md-2 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>l&ouml;schen</button>
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
       </div>
       </div>
@@ -108,7 +108,7 @@
                 <tr>
                     <th>Kursname</th>
                    <!-- <th>Gr&oumlsse</th> -->
-                    <th>ist aktiv</th>
+                    <th>aktiv</th>
                     <th>Zugriffszeit</th>
                 </tr>
             </head> 
