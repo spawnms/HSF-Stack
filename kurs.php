@@ -10,6 +10,10 @@
     $shell2 = shell_exec("python py/list_project.py");
     $ausgabe2 = json_decode($shell2);
 
+    $coursequery = $pdo->query("SELECT praefix FROM kurse group by praefix");
+    $courcedata = $coursequery->fetchALL(PDO::FETCH_ASSOC);
+
+  
     $kurse = array();
 
     session_write_close();
@@ -30,6 +34,7 @@
      <script src="js/remove_project_id.js"></script>
      <script src="js/remove_user_id.js"></script>
      <script src="js/create_user_project.js"></script>
+     <script src="js/remove_course.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -163,7 +168,7 @@
       <div class="col-md-3 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
       </div>
-
+<!-- ##################################################################################################################################### -->
       <div class="col-md-2 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#userdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
@@ -178,8 +183,17 @@
                   <div class="container-fluid">
                     <div class="row">
                       <div class="col-md-8 col-sm-8">
-                        <form class="deletecourse" method="post" action="../py/deletecourse.php">
-                         
+                        <form class="deletecourse" method="post" action="py/remove_project_id.php">
+                         <div class="form-group projekt">
+                                <label for="Projekt">Projekt</label>
+                               <select class="form-control" name="projektloeschen" id="projektloeschen">
+                                <?php 
+                                  for ($i = 0;$i < count($courcedata);$i++){
+                                    echo '<option>'.$courcedata[$i]['praefix'].'</option>';
+                                  }
+                                ?>
+                               </select>
+                            </div>
                         </form>
                       </div>
                       <div id="bingo"></div>
@@ -187,12 +201,14 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                    <button type="submit" id="submit" name="submit" class="btn btn-primary">Änderungen speichern</button>
+                    <button type="submit" id="submitloeschen" name="submit" class="btn btn-primary">Änderungen speichern</button>
                   </div>
                 </div>
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
+
+<!-- ##################################################################################################################################### -->
       </div>
         <div class="modal fade bearbeiten-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Kurs bearbeiten">
             <div class="modal-dialog modal-lg">

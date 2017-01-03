@@ -8,9 +8,9 @@ $sid = strip_tags($_POST["sid"]);
 
 $schreiben = "Projekt-ID: ".$tenant.", SID: ".$sid;
 
-$test = fopen("testdatei.txt",c);
-fwrite($test,$schreiben);
-fclose($test);
+// $test = fopen("testdatei.txt",c);
+// fwrite($test,$schreiben);
+// fclose($test);
 
 	$output2 = shell_exec("python remove_project_id.py $tenant"); //$storage muss dann noch eingefügt werden
 
