@@ -103,7 +103,7 @@
       </div>
       <div class="row">
         <div class="col-md-11">
-          <table class="table table-hover">
+          <table class="table table-hover tableabstand">
             <head>
                 <tr>
                     <th>Kursname</th>

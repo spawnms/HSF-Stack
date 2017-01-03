@@ -2,6 +2,7 @@
 session_start();
 
 session_id($_POST['sid']);
+$kurse = array();
 
 $auswahl = strip_tags($_POST['auswahl']);
 $name = strip_tags($_POST['benutzername']);
@@ -21,5 +22,6 @@ fclose($test);
 if($auswahl === "Benutzer"){
 	$output2 = shell_exec("python createuser.py $name $password $description $projekt");
 }
+
 session_write_close();
 ?>

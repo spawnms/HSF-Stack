@@ -273,7 +273,7 @@
       </div>
       <div class="row">
         <div class="col-md-11">
-          <table class="table table-hover table-striped">
+          <table class="table table-hover table-striped tableabstand">
             <head>
                 <tr>
                     <th>Benutzer</th>

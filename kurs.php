@@ -1,6 +1,7 @@
 <?php
     session_start();
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
+    require_once ("config/config.php");
     $name = $_SESSION['userid'];
 
     $shell = shell_exec("python py/list_user.py");
@@ -9,22 +10,8 @@
     $shell2 = shell_exec("python py/list_project.py");
     $ausgabe2 = json_decode($shell2);
 
-    $ausnahmen = array('admin', 'services', 'aodh','heat_admin','heat','swift','fuel_stats_user','cinder','ceilometer','murano','heat-cfn','neutron','nova','glance','glare');
+    $kurse = array();
 
-
-    // echo "Count ausgabe2: ".count($ausgabe2);
-    // echo "<br/>";
-    // print_r($ausgabe2);
-
-    // var_dump($ausgabe);
-    // echo "<br/><br/>";
-    // var_dump(key($ausgabe[0]));
-    // echo "<br/><br/>";
-    // echo $ausgabe[0]->ID;
-    // echo "<br/><br/>";
-    // echo $ausgabe[0]->Name;
-    // echo "<br/><br/>";
-    // echo "Count: ".count($ausgabe);
     session_write_close();
     ?>
 <!DOCTYPE html>
@@ -147,6 +134,7 @@
                                  <?php
                                   for($i = 0; $i < count($ausgabe2);$i++)
                                   {
+                                    /* $ausnahmen sind in der config.php gespeichert */
                                     if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))) {
                                     echo "<option>".$ausgabe2[$i]->Name."</option>";
                                   }
@@ -177,7 +165,7 @@
       </div>
 
       <div class="col-md-2 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
+      <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#userdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
           <div class="modal fade" id="userdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
             <div class="modal-dialog modal-lg" role="document">
@@ -191,7 +179,7 @@
                     <div class="row">
                       <div class="col-md-8 col-sm-8">
                         <form class="deletecourse" method="post" action="../py/deletecourse.php">
-                          
+                         
                         </form>
                       </div>
                       <div id="bingo"></div>
@@ -214,6 +202,7 @@
             </div>
         </div>
         </div>
+     <!--    
       <div class="row">
         <div class="col-md-5 kurstabelle">
           <table class="table table-hover">
@@ -273,6 +262,84 @@
           </table>
         </div>
       </div>
+      -->
+
+      <div class="row kurs_projektuebersicht">
+      <div class="col-md-11">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <?php
+            for($i = 0; $i < count($ausgabe2);$i++){
+              if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
+                if(!(in_array(strstr($ausgabe2[$i]->Name, "_",true), $kurse)))
+                  $kurse[] = strstr($ausgabe2[$i]->Name, "_",true);
+                }
+              }
+            sort($kurse,SORT_STRING);
+            for($j = 0; $j < count($kurse);$j++){
+          // foreach ($kurse as $value) {
+            echo '<div class="panel panel-default">';
+              echo '<div class="panel-heading" role="tab" id="heading'.$kurse[$j].'">';
+              // echo '<div class="panel-heading" role="tab" id="heading'.$value.'">';
+                echo '<h4 class="panel-title">';
+                  if($j == 0)
+                    echo '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'.$kurse[$j].'" aria-expanded="true" aria-controls="collapse'.$kurse[$j].'">';
+                  else
+                  echo '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'.$kurse[$j].'" aria-expanded="false" aria-controls="collapse'.$kurse[$j].'">';
+                  // echo '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'.$value.'" aria-expanded="false" aria-controls="collapse'.$value.'">';
+                  echo ''.$kurse[$j].'';
+                  // echo ''.$value.'';
+                  echo '</a>';
+                echo '</h4>';
+              echo '</div>';
+              if($j == 0)
+                echo '<div id="collapse'.$kurse[$j].'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'.$kurse[$j].'">';
+              else
+              echo '<div id="collapse'.$kurse[$j].'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$kurse[$j].'">';
+              // echo '<div id="collapse'.$value.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$value.'">';
+                echo '<div class="panel-body">';
+                  // echo '<div class="col-md-5 kurstabelle">';
+                    echo '<table class="table table-hover">';
+                      echo '<head>';
+                        echo '<tr>';
+                          echo '<th>Projekt</th>
+                                <th>ID</th>
+                                <th></th>';
+                          echo '</tr>';
+                      echo '</head>'; 
+                      echo '<body>';
+                        for($i = 0; $i < count($ausgabe2);$i++){
+                            /* $ausnahmen sind in der config.php gespeichert */
+                          if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
+                            if(strcmp(strstr($ausgabe2[$i]->Name, "_",true), $kurse[$j]) == 0){
+                              echo '<tr>';
+                                echo '<td>'.$ausgabe2[$i]->Name.'</td>';
+                                echo '<td>'.$ausgabe2[$i]->ID.'</td>';
+                                echo '<td>';
+                                echo '<button type="button" class="btn btn-default muelleimer project" id="'.$ausgabe2[$i]->ID.'">';
+                                echo '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
+                                echo '</button>';
+                                echo '</td>';
+                              echo '</tr>';
+                            }
+                          }
+                        }
+                      echo '</body>';
+                    echo '</table>';
+                  // echo '</div>';
+                echo '</div>';
+              echo '</div>';
+            echo '</div>';
+        }
+        ?>
+      </div>
+      </div>
+    </div>
+
+
+
+
+
+
     </div>
 
       

@@ -81,7 +81,7 @@ h2.schrift{
 /*################### main.php ################################*/
 /* Farbpalette: http://paletton.com/#uid=52G0Y0ko0tBeuGUjGxdsKq3uOky */
 
-.table{
+.tableabstand{
   margin-top: 50px;
 }
 
@@ -116,6 +116,10 @@ background-color:transparent;
 background-color:#f5f5f5;
 border-color:;
 color:#333;
+}
+
+.kurs_projektuebersicht{
+margin-top:50px;
 }
 /*##############################################################*/
 

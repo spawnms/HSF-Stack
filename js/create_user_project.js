@@ -24,7 +24,7 @@ $(function(){
         				//$(".beschreibung").css('visibility','hidden');
                 $(".projekt").remove();
         				//$(".projekt").css('visibility','hidden');
-                $("#bingo").after('<div class="col-xs-4"> <div class="checkbox disabled"><label><input type="checkbox" id="netzwerk"> Default Netzwerk </label></div> <div class="checkbox disabled"><label> <input type="checkbox" value="router" id="router">Default Router</label></div><div class="checkbox disabled"><label><input type="checkbox" value="storage" id="storage">Default Storage</label></div></div>');
+                $("#bingo").after('<div class="col-xs-4"><div class="checkbox disabled"><label><input type="checkbox" id="netzwerk"> Default Netzwerk </label></div> <div class="checkbox disabled"><label> <input type="checkbox" value="router" id="router">Default Router</label></div><div class="checkbox disabled"><label><input type="checkbox" value="storage" id="storage">Default Storage</label></div></div>');
               }
             })
             .trigger("change");
