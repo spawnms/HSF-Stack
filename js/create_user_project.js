@@ -3,8 +3,12 @@ $(function(){
             $("#auswahl").change(function(){
               $("#auswahl option:selected").each(function(){
                 str += $(this).text() + " ";
+                var benutzerzaehler = 0;
+                var projektzaehler = 0;
               });
-              if(str === "Benutzer "){
+              if(str === "Benutzer " && benutzerzaehler === 0){
+                benutzerzaehler++;
+                projektzaehler = 0;
               $("#labela").text("Benutzer");
               $(".postfix").remove();
               $(".anzahl").remove();

@@ -4,8 +4,8 @@ require_once ("../config/config.php");
 session_id($_POST['sid']);
 
 $auswahl = strip_tags($_POST['auswahl']);
-$name = strip_tags($_POST['benutzername']);
-$postfix = strip_tags($_POST['postfix']);
+$kurs = strip_tags($_POST['benutzername']);
+$projekt = strip_tags($_POST['postfix']);
 $anzahl = strip_tags(	$_POST['anzahl']);
 $netzwerk = strip_tags($_POST['netzwerk']);
 $router = strip_tags($_POST['router']);
@@ -24,7 +24,7 @@ $projectdata = $projectquery->fetchALL(PDO::FETCH_ASSOC);
 $stmt = $pdo->prepare("INSERT INTO kurse (praefix, projekt, projekt_ID) VALUES (:praefix, :projekt, :projekt_ID)");
 
 if($auswahl === "Projekt"){
-	$output2 = shell_exec("python kursanlegen.py $name $postfix $anzahl $netzwerk $router"); //$storage muss dann noch eingefügt werden
+	$output2 = shell_exec("python kursanlegen.py $kurs $projekt $anzahl $netzwerk $router"); //$storage muss dann noch eingefügt werden
 	$shell2 = shell_exec("python list_project.py");
     $ausgabe = json_decode($shell2);
 	/* $ausnahmen sind in der config.php gespeichert */
@@ -32,7 +32,7 @@ if($auswahl === "Projekt"){
               if(!(in_array($ausgabe[$i]->Name,$ausnahmen)) && !(in_array($ausgabe[$i]->Name, $test3))){
               
               	  $test2 = array('praefix' => strstr($ausgabe[$i]->Name,"_",true), 'projekt' => $ausgabe[$i]->Name, 'projekt_ID' => $ausgabe[$i]->ID);
-    			  $stmt->execute($test2);
+    			        $stmt->execute($test2);
                 }
               }
 }

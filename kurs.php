@@ -1,7 +1,11 @@
 <?php
     session_start();
-    error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
+    //error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     require_once ("config/config.php");
+     if(!isset($_SESSION['userid'])){
+      header("Location:index.php");
+    }
+    
     $name = $_SESSION['userid'];
 
     $shell = shell_exec("python py/list_user.py");
@@ -10,9 +14,28 @@
     $shell2 = shell_exec("python py/list_project.py");
     $ausgabe2 = json_decode($shell2);
 
-    $coursequery = $pdo->query("SELECT praefix FROM kurse group by praefix");
-    $courcedata = $coursequery->fetchALL(PDO::FETCH_ASSOC);
+    shell_exec('py/nova_bash.sh');
+    $datei = file_get_contents('py/test.txt');
+    $array = explode(",", $datei);
+    for($i = 0;$i < count($array);$i++){
+     if(!($i === 0) && !($i === count($array)-1)){
+        $ergebnis[$i]['Server_ID'] = explode(":",$array[$i])[0];
+        $ergebnis[$i]['Tenant_ID'] = explode(":",$array[$i])[1];
+        $ergebnis[$i]['Status'] = explode(":",$array[$i])[2];
+    }
+    }
 
+    // print_r($datei);
+    // foreach($datei as $result){
+    //   $b = explode(":",$result);
+    //   $ergebnis['Server_ID'] = $b[0];
+    //   $ergebnis['Tenant_ID'] = $b[1];
+    // }
+
+    print_r($ergebnis);
+
+    $coursequery = $pdo->query("SELECT praefix FROM kurse group by praefix");
+    $coursedata = $coursequery->fetchALL(PDO::FETCH_ASSOC);
   
     $kurse = array();
 
@@ -35,6 +58,7 @@
      <script src="js/remove_user_id.js"></script>
      <script src="js/create_user_project.js"></script>
      <script src="js/remove_course.js"></script>
+     <script src="js/courseset.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,7 +77,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.php">HSF-Stack Kursverwaltung</a>
+          <a class="navbar-brand" href="main.php">HSF-Stack</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <!-- <ul class="nav navbar-nav">
@@ -74,20 +98,20 @@
             </li> 
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="main.php">Dashboard</a></li>
+            <!-- <li><a href="main.php">Dashboard</a></li> -->
             <li><a href="#">Kurs</a></li>
-            <li><a href="projekt.php">Projekt</a></li>
-            <li><a href="sicherheit.php">Sicherheit</a></li>
+            <!-- <li><a href="projekt.php">Projekt</a></li> -->
+            <!-- <li><a href="sicherheit.php">Sicherheit</a></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="user/userverwaltung.php"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <!-- <li><a href="#">Another action</a></li> -->
+               <!--  <li><a href="#">Something else here</a></li> -->
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
-                <li><a href="index.php">Logout <?php setcookie("", time()-3600); session_destroy(); ?></a></li>
+                <li><a href="index.php">Logout <?php setcookie(session_id(), time()-3600); session_destroy(); ?></a></li>
               </ul>
             </li> 
           </ul>
@@ -118,8 +142,8 @@
                         <div class="form-group">
                           <lable for="Auswahl">Benutzer/Projekt anlegen</lable>
                           <select class="form-control" name="auswahl" id="auswahl">
-                          <option>Benutzer</option>
                           <option>Projekt</option>
+                          <option>Benutzer</option>
                           </select>
                         </div>
                             <div class="form-group benutzername">
@@ -166,8 +190,43 @@
 
 <!-- ##################################################################################################################################### -->
       <div class="col-md-3 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
+      <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#kursset"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
       </div>
+       <div class="modal fade" id="kursset" role="dialog" aria-labelledby="rasterSystemModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times</span></button>
+                    <h4 class="modal-title" id="rasterSystemModalLabel">OpenStack Kurs starten / stoppen</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-md-8 col-sm-8">
+                        <form class="deletecourse" method="post" action="#">
+                         <div class="form-group kurset">
+                                <label for="Projekt">Projekt</label>
+                               <select class="form-control" name="strsto" id="strsto">
+                                <?php 
+                                  for ($i = 0;$i < count($coursedata);$i++){
+                                    echo '<option>'.$coursedata[$i]['praefix'].'</option>';
+                                  }
+                                ?>
+                               </select>
+                            </div>
+                        </form>
+                      </div>
+                      <div id="bingoset"></div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                    <button type="submit" id="submitset" name="submit" class="btn btn-primary">Änderungen speichern</button>
+                  </div>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
 <!-- ##################################################################################################################################### -->
       <div class="col-md-2 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#userdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
@@ -183,25 +242,30 @@
                   <div class="container-fluid">
                     <div class="row">
                       <div class="col-md-8 col-sm-8">
+                      <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen"><span aria-hidden="true">×</span></button>
+                        <h4>Achtung! Seien Sie vorsichtig!</h4>
+                        <p>Wenn Sie einen Kurs ausgew&auml;hlt haben und auf "Kurs l&ouml;schen" klicken, erfolgt keine Warnung! Der Kurs wird unwiederruflich gelöscht!</p>
+                      </div>
                         <form class="deletecourse" method="post" action="py/remove_project_id.php">
-                         <div class="form-group projekt">
+                         <div class="form-group projektdelete">
                                 <label for="Projekt">Projekt</label>
                                <select class="form-control" name="projektloeschen" id="projektloeschen">
                                 <?php 
-                                  for ($i = 0;$i < count($courcedata);$i++){
-                                    echo '<option>'.$courcedata[$i]['praefix'].'</option>';
+                                  for ($i = 0;$i < count($coursedata);$i++){
+                                    echo '<option>'.$coursedata[$i]['praefix'].'</option>';
                                   }
                                 ?>
                                </select>
                             </div>
                         </form>
                       </div>
-                      <div id="bingo"></div>
+                      <div id="bingodelete"></div>
                     </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                    <button type="submit" id="submitloeschen" name="submit" class="btn btn-primary">Änderungen speichern</button>
+                    <button type="submit" id="submitloeschen" name="submit" class="btn btn-primary submitloeschen" data-toggle="tooltip" data-placement="top">Kurs l&ouml;schen</button>
                   </div>
                 </div>
               </div><!-- /.modal-content -->
@@ -319,7 +383,7 @@
                         echo '<tr>';
                           echo '<th>Projekt</th>
                                 <th>ID</th>
-                                <th></th>';
+                                <th>l&ouml;schen</th>';
                           echo '</tr>';
                       echo '</head>'; 
                       echo '<body>';

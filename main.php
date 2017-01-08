@@ -1,16 +1,28 @@
 <?php
     session_start();
    // include("config/function.php");
-    error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
+   // error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
+    require_once ("config/config.php");
     if(!isset($_SESSION['userid'])){
       header("Location:index.php");
     }
     $name = $_SESSION['userid'];
+    $string = "";
+    $projekt_ID = array();
 
     $shell = shell_exec("python py/list_project.py");
     $ausgabe = json_decode($shell);
     $ausnahmen = array('admin', 'services');
 
+    $usagequery = $pdo->query("SELECT projekt_ID FROM kurse group by projekt_ID");
+    $usagedata = $usagequery->fetchALL(PDO::FETCH_ASSOC);
+
+    $usage = shell_exec("python py/usage2.py "); //$storage muss dann noch eingefügt werden
+    $ausgabe2 = json_decode($usage);
+
+    for ($k = 0;$k<count($ausgabe2);$k++){
+      array_push($projekt_ID,$ausgabe2[$k]->Project);
+    }
 
   session_write_close();
 ?>
@@ -66,16 +78,16 @@
             </li> 
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
+            <!-- <li><a href="#">Dashboard</a></li> -->
             <li><a href="kurs.php">Kurs</a></li>
-            <li><a href="projekt.php">Projekt</a></li>
-            <li><a href="sicherheit.php">Sicherheit</a></li>
+            <!-- <li><a href="projekt.php">Projekt</a></li> -->
+            <!-- <li><a href="sicherheit.php">Sicherheit</a></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="user/userverwaltung.php"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <!-- <li><a href="#">Another action</a></li> -->
+                <!-- <li><a href="#">Something else here</a></li> -->
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
@@ -89,7 +101,7 @@
 
     <div class="container">
     <div class="row">
-       <div class="col-md-10">
+<!--        <div class="col-md-10">
     <div class="col-md-2 col-md-offset-2 titel">
   <button type="button" class="btn btn-success btn-block neu" data-toggle="modal" data-target="#modaluseradd" ><span class="glyphicon glyphicon-plus gl" aria-hidden="true"></span>NEU</button>
   </div>
@@ -99,17 +111,18 @@
       <div class="col-md-2 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
-      </div>
+      </div> -->
       </div>
       <div class="row">
         <div class="col-md-11">
           <table class="table table-hover tableabstand">
             <head>
                 <tr>
-                    <th>Kursname</th>
+                    <th>Projektname</th>
                    <!-- <th>Gr&oumlsse</th> -->
                     <th>aktiv</th>
-                    <th>Zugriffszeit</th>
+                    <th>laufende Server</th>
+                    <th></th>
                 </tr>
             </head> 
             <body>
@@ -123,10 +136,15 @@
               } else {
                 echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>';
               }
-                echo   '<td>
-                    
-                   </td>
-                 </tr>';
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen)) && in_array($ausgabe[$i]->ID,$projekt_ID)){
+                  for ($j = 0; $j < count($ausgabe2);$j++){
+                    if($ausgabe[$i]->ID === $ausgabe2[$j]->Project){
+                      echo '<td id="'.$ausgabe[$i]->ID.'">'.$ausgabe2[$j]->Servers.'</tr>';
+                    }
+                }
+                } else {
+                  echo '<td id="'.$ausgabe[$i]->ID.'"></td> </tr>';
+                }
               }
               }
                 ?>

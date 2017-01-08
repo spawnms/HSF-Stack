@@ -75,19 +75,19 @@
             </li> 
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
+            <!-- <li><a href="#">Dashboard</a></li> -->
             <li><a href="../kurs.php">Kurs</a></li>
-            <li><a href="../projekt.php">Projekt</a></li>
-            <li><a href="../sicherheit.php">Sicherheit</a></li>
+            <!-- <li><a href="../projekt.php">Projekt</a></li>
+            <li><a href="../sicherheit.php">Sicherheit</a></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="userverwaltung.php"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <!-- <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li> -->
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
+                <!-- <li><a href="#">Separated link</a></li> -->
                 <li><a href="../index.php">Logout <?php setcookie("", time()-3600); session_destroy(); ?></a></li>
               </ul>
             </li> 

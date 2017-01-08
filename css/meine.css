@@ -125,6 +125,12 @@ margin-top:50px;
 .removeall{
   margin-left:10%;
 }
+
+.submitloeschen:hover{
+  color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
 /*##############################################################*/
 
 /*#################### userverwaltung.php#######################*/
