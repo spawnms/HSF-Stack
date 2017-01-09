@@ -25,15 +25,6 @@
     }
     }
 
-    // print_r($datei);
-    // foreach($datei as $result){
-    //   $b = explode(":",$result);
-    //   $ergebnis['Server_ID'] = $b[0];
-    //   $ergebnis['Tenant_ID'] = $b[1];
-    // }
-
-    print_r($ergebnis);
-
     $coursequery = $pdo->query("SELECT praefix FROM kurse group by praefix");
     $coursedata = $coursequery->fetchALL(PDO::FETCH_ASSOC);
   
@@ -142,8 +133,8 @@
                         <div class="form-group">
                           <lable for="Auswahl">Benutzer/Projekt anlegen</lable>
                           <select class="form-control" name="auswahl" id="auswahl">
-                          <option>Projekt</option>
                           <option>Benutzer</option>
+                          <option>Projekt</option>
                           </select>
                         </div>
                             <div class="form-group benutzername">
@@ -383,7 +374,8 @@
                         echo '<tr>';
                           echo '<th>Projekt</th>
                                 <th>ID</th>
-                                <th>l&ouml;schen</th>';
+                                <th>l&ouml;schen</th>
+                                <th></th>';
                           echo '</tr>';
                       echo '</head>'; 
                       echo '<body>';

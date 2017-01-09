@@ -15,8 +15,4 @@ router = str(sys.argv[5])
 for a in xrange(1, int(float(anzahl)+1)):
 	print (str(a))
 	os.system("python create_project.py "+kurs+" "+projekt+" "+str(a))
-	#os.system("python create_subnet.py "+name+" "+ipadresse+" "+str(a))
-	if netzwerk == 'true':
-		os.system("python create_subnet.py "+kurs+" "+projekt+" "+str(a))
-	elif router == 'true':
-		os.system("python create_router.py "+kurs+" "+projekt+" "+str(a))
+

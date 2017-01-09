@@ -3,16 +3,12 @@ $(function(){
             $("#auswahl").change(function(){
               $("#auswahl option:selected").each(function(){
                 str += $(this).text() + " ";
-                var benutzerzaehler = 0;
-                var projektzaehler = 0;
               });
-              if(str === "Benutzer " && benutzerzaehler === 0){
-                benutzerzaehler++;
-                projektzaehler = 0;
+              if(str === "Benutzer "){
               $("#labela").text("Benutzer");
               $(".postfix").remove();
               $(".anzahl").remove();
-              $("#bingo").remove();
+              $("#bingo").css("hidden");
               // $(".benutzername").after('<div class="form-group benutzerpasswd"><label for="Benutzerpasswd">Passwort</label><input type="password" name="benutzerpasswd" class="form-control" id="benutzerpasswd" placeholder="Passwort"></div>');
               // $(".benutzerpasswd").after('<div class="form-group beschreibung"><textarea class="form-control" rows"3" placeholder="Beschreibung" id="beschreibung"></textarea></div>');
               // $(".beschreibung").after('<div class="form-group projekt"><label for="Anzahl">Projekt</label><select class="form-control" name="projekt" id="projekt"><?php for($i = 0; $i < count($ausgabe2);$i++) { if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))) { echo "<option>".$ausgabe2[$i]->Name."</option>"; } } ?> </select> </div>');
@@ -28,7 +24,7 @@ $(function(){
         				//$(".beschreibung").css('visibility','hidden');
                 $(".projekt").remove();
         				//$(".projekt").css('visibility','hidden');
-                $("#bingo").after('<div class="col-xs-4"><div class="checkbox disabled"><label><input type="checkbox" id="netzwerk"> Default Netzwerk </label></div> <div class="checkbox disabled"><label> <input type="checkbox" value="router" id="router">Default Router</label></div><div class="checkbox disabled"><label><input type="checkbox" value="storage" id="storage">Default Storage</label></div></div>');
+                $("#bingo").prepend('<div class="col-xs-4"><div class="checkbox disabled"><label><input type="checkbox" id="netzwerk"> Default Netzwerk </label></div> <div class="checkbox disabled"><label> <input type="checkbox" value="router" id="router">Default Router</label></div><div class="checkbox disabled"><label><input type="checkbox" value="storage" id="storage">Default Storage</label></div></div>');
               }
             })
             .trigger("change");
