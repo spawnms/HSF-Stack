@@ -14,6 +14,7 @@
     $shell2 = shell_exec("python py/list_project.py");
     $ausgabe2 = json_decode($shell2);
 
+
     shell_exec('py/nova_bash.sh');
     $datei = file_get_contents('py/test.txt');
     $array = explode(",", $datei);
@@ -130,8 +131,8 @@
                       <div class="row">
                           <div class="col-md-7 col-sm-7">
                         <form class="createuser" method="post" action="../py/createuser.php">
-                        <div class="form-group">
-                          <lable for="Auswahl">Benutzer/Projekt anlegen</lable>
+                        <div class="form-group auswahl">
+                          <label for="Auswahl">Benutzer/Projekt anlegen</label>
                           <select class="form-control" name="auswahl" id="auswahl">
                           <option>Benutzer</option>
                           <option>Projekt</option>
