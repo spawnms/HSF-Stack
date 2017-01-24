@@ -20,13 +20,12 @@ $string3 = "";
 
 	for($i=0;$i<count($id);$i++){
       $string .= $id[$i]['projekt_ID']." ";
-      $string2 .= $id[$i]['netzwerk_ID']." ";
-      $string3 .= $id[$i]['projekt']." ";
+      $string2 .= $id[$i]['projekt']." ";
   }
 
 
 
-	shell_exec("python remove_router.py $string3");
+	shell_exec("python remove_router.py $string2");
 	shell_exec("python remove_network.py $string2");
 	shell_exec("python remove_course.py $string"); //$storage muss dann noch eingefügt werden
 

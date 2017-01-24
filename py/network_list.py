@@ -1,6 +1,4 @@
-# Folgendes Skirpt legt ein neues Netzwerk und zugehoeriges Subnet
-# an. Jedes Netzwerk und Subnetz enthaelt den Projektnamen und Ziffer die
-# von einem uebergeordneten Skript uebergeben.
+# Folgendes Skirpt zeigt alle Netzwerke an und gibt diese im JSON-Format aus.
 
 import os
 import subprocess

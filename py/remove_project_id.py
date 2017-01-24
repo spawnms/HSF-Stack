@@ -10,7 +10,7 @@ import sys
 
 
 #Einlesen der Parameter
-tenant = str(sys.argv[1]) #Parameter 1
+tenant = str(sys.argv[1]) #eindeutige ID des Projekts
 
 #Ausfuehren des Linux Befehls
 os.system("openstack project delete "+tenant+" --os-username admin --os-password 0penStack-BPIE --os-auth-url https://public.fuel.local:5000/v3 --os-project-name admin --os-cacert /etc/ssl/certs/cacert-openstack.pem --os-user-domain-name default --os-identity-api-version 3 --os-image-api-version 2 --os-project-domain-name default")

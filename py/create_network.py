@@ -7,17 +7,8 @@ import subprocess
 import sys
 
 #Parameter einlesen
-tenant_id = str(sys.argv[1]) #Parameter 1
-projekt = str(sys.argv[2]) #Parameter 2
-#zaehler = str(sys.argv[3]) #Parameter 3
-#ipadresse = "192.168.0.0/24"
-#Tenant ID des PRojekts ermitteln
-# proc = subprocess.Popen(["openstack project list --user "+kurs+"_"+projekt+""+zaehler+" -c ID  --os-username admin --os-password 0penStack-BPIE --os-auth-url https://public.fuel.local:5000/v3 --os-project-name admin --os-cacert /etc/ssl/certs/cacert-openstack.pem --os-user-domain-name default --os-identity-api-version 3 --os-image-api-version 2 --os-project-domain-name default"], stdout=subprocess.PIPE, shell=True)
-# (tenant, err) = proc.communicate()
+tenant_id = str(sys.argv[1]) # Eindeutige Id des Projektes
+projekt = str(sys.argv[2]) # Netzwerkname, der aehnlich dem Projektnamen ist
 
-# tenant_id = tenant[113:145]
-# print (tenant_id)
 #Ausfuehren des Linux Befehls Netzwerk anlegen
 os.system("neutron net-create --tenant-id "+tenant_id+" "+projekt+" --os-username admin --os-password 0penStack-BPIE --os-auth-url https://public.fuel.local:5000/v3 --os-project-name admin --os-cacert /etc/ssl/certs/cacert-openstack.pem --os-user-domain-name default --os-project-domain-name default -f json");
-#Ausfuehren des Linux Befehls Subnetz anlegen
-#os.system("neutron subnet-create "+projekt+" "+ipadresse+" --name "+projekt+"-subnet1 --tenant-id "+tenant_id+" --os-username admin --os-password 0penStack-BPIE --os-auth-url https://public.fuel.local:5000/v3 --os-project-name admin --os-cacert /etc/ssl/certs/cacert-openstack.pem --os-user-domain-name default --os-project-domain-name default -f json")

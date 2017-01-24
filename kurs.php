@@ -7,6 +7,8 @@
     }
     
     $name = $_SESSION['userid'];
+    $zaehler=0;
+    $ergebnis = array();
 
     $shell = shell_exec("python py/list_user.py");
     $ausgabe = json_decode($shell);
@@ -14,21 +16,12 @@
     $shell2 = shell_exec("python py/list_project.py");
     $ausgabe2 = json_decode($shell2);
 
-
-    shell_exec('py/nova_bash.sh');
-    $datei = file_get_contents('py/test.txt');
-    $array = explode(",", $datei);
-    for($i = 0;$i < count($array);$i++){
-     if(!($i === 0) && !($i === count($array)-1)){
-        $ergebnis[$i]['Server_ID'] = explode(":",$array[$i])[0];
-        $ergebnis[$i]['Tenant_ID'] = explode(":",$array[$i])[1];
-        $ergebnis[$i]['Status'] = explode(":",$array[$i])[2];
-    }
-    }
+    $shell2 = shell_exec("python py/server_list.py");
+    $serverlist = json_decode($shell2);
 
     $coursequery = $pdo->query("SELECT praefix FROM kurse group by praefix");
     $coursedata = $coursequery->fetchALL(PDO::FETCH_ASSOC);
-  
+
     $kurse = array();
 
     session_write_close();
@@ -40,9 +33,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>HSF-Fulda Kurse</title>
+    <title>HSF-Fulda Kurs&uuml;bersicht</title>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap und Javascriptressourcen-->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/meine.css" rel="stylesheet">
     <script src="js/jquery-3.1.1.js"></script>
@@ -51,6 +44,8 @@
      <script src="js/create_user_project.js"></script>
      <script src="js/remove_course.js"></script>
      <script src="js/courseset.js"></script>
+     <script src="js/suspend_instanz.js"></script>
+     <script src="js/resume_instanz.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -69,7 +64,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.php">HSF-Stack</a>
+          <a class="navbar-brand" href="main.php">HSF-Stack Kursverwaltung</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <!-- <ul class="nav navbar-nav">
@@ -101,9 +96,9 @@
                 <!-- <li><a href="#">Another action</a></li> -->
                <!--  <li><a href="#">Something else here</a></li> -->
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="index.php">Logout <?php setcookie(session_id(), time()-3600); session_destroy(); ?></a></li>
+              <!--   <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li> -->
+                <li><a href="index.php">Logout</a></li>
               </ul>
             </li> 
           </ul>
@@ -129,26 +124,16 @@
                   <div class="modal-body">
                     <div class="container-fluid">
                       <div class="row">
-                          <div class="col-md-7 col-sm-7">
+                          <div class="col-md-7 col-sm-7" id="projektform">
                         <form class="createuser" method="post" action="../py/createuser.php">
                         <div class="form-group auswahl">
                           <label for="Auswahl">Benutzer/Projekt anlegen</label>
                           <select class="form-control" name="auswahl" id="auswahl">
                           <option>Benutzer</option>
-                          <option>Projekt</option>
+                          <option>Kurs</option>
                           </select>
                         </div>
-                            <div class="form-group benutzername">
-                                <label id="labela" for="Benutzname">Benutzername</label>
-                                <input type="user" name="benutzername" class="form-control" id="benutzername" autofocus="true" placeholder="Benutzername">
-                            </div>
-                            <div class="form-group benutzerpasswd">
-                                <label for="Benutzerpasswd">Passwort</label>
-                                <input type="password" name="benutzerpasswd" class="form-control" id="benutzerpasswd" placeholder="Passwort">
-                            </div>
-                            <div class="form-group beschreibung">
-                                <textarea class="form-control" rows"3" placeholder="Beschreibung" id="beschreibung"></textarea>
-                            </div>
+  
                             <div class="form-group projekt">
                                 <label for="Anzahl">Projekt</label>
                                <select class="form-control" name="projekt" id="projekt">
@@ -181,15 +166,16 @@
         <!-- Modal Neu Ende -->
 
 <!-- ##################################################################################################################################### -->
-      <div class="col-md-3 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#kursset"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
+          <!-- Modal BEARBEITEN -->
+      <div class="col-md-4 col-md-offset-1 titel">
+      <button type="button" class="btn btn-block btn-primary" id="modalset" data-toggle="modal" data-target="#kursset" data-loading-text="hole Daten..." autocomplete="off"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>INSTANZEN BEARBEITEN</button>
       </div>
        <div class="modal fade" id="kursset" role="dialog" aria-labelledby="rasterSystemModalLabel">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times</span></button>
-                    <h4 class="modal-title" id="rasterSystemModalLabel">OpenStack Kurs starten / stoppen</h4>
+                    <h4 class="modal-title" id="rasterSystemModalLabel">OpenStack Kurs suspendieren / resumen</h4>
                 </div>
                 <div class="modal-body">
                   <div class="container-fluid">
@@ -213,13 +199,16 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                    <button type="submit" id="submitset" name="submit" class="btn btn-primary">Änderungen speichern</button>
+                    <button type="submit" id="submitsuspend" name="submitsuspend" class="btn btn-danger">suspendieren</button>
+                    <button type="submit" id="submitresumed" name="submitresumed" class="btn btn-success">neustarten</button>
                   </div>
                 </div>
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
+          <!-- Modal BEARBEITEN Ende -->
 <!-- ##################################################################################################################################### -->
+          <!-- Modal LOESCHEN -->
       <div class="col-md-2 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#userdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
@@ -263,7 +252,7 @@
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
-
+    <!-- Modal LOESCHEN Ende-->
 <!-- ##################################################################################################################################### -->
       </div>
         <div class="modal fade bearbeiten-modal-lg" tabindex="-1" role="dialog" aria-labelledby="Kurs bearbeiten">
@@ -274,72 +263,14 @@
             </div>
         </div>
         </div>
-     <!--    
-      <div class="row">
-        <div class="col-md-5 kurstabelle">
-          <table class="table table-hover">
-            <head>
-                <tr>
-                    <th>Benutzer</th>
-                    <th>ID</th>
-                    <th></th>
-                </tr>
-            </head> 
-            <body>
-            <?php
-              for($i = 0; $i < count($ausgabe);$i++) {
-                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))) {
-                    echo '
-                        <tr>
-                           <td>'.$ausgabe[$i]->Name.'</td>
-                           <td>'.$ausgabe[$i]->ID.'</td>
-                           <td>
-                               <button type="button" class="btn btn-default muelleimer user" id="'.$ausgabe[$i]->ID.'">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                               </button>
-                           </td>
-                        </tr>';
-              }
-            }
-            ?>
-            </body>   
-          </table>
-        </div>
-         <div class="col-md-5 kurstabelle">
-          <table class="table table-hover">
-            <head>
-                <tr>
-                    <th>Projekt</th>
-                    <th>ID</th>
-                    <th></th>
-                </tr>
-            </head> 
-            <body>
-            <?php
-              for($i = 0; $i < count($ausgabe2);$i++){
-                if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
-                echo '<tr>
-                   <td>'.$ausgabe2[$i]->Name.'</td>
-                   <td>'.$ausgabe2[$i]->ID.'</td>
-                   <td>
-                    <button type="button" class="btn btn-default muelleimer project" id="'.$ausgabe2[$i]->ID.'">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                    </button>
-                   </td>
-                 </tr>';
-              }
-            }
-                ?>
-            </body>   
-          </table>
-        </div>
-      </div>
-      -->
+     
 
       <div class="row kurs_projektuebersicht">
-      <div class="col-md-11">
+      <div class="col-md-9 col-md-offset-1">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
           <?php
+
+            
             for($i = 0; $i < count($ausgabe2);$i++){
               if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
                 if(!(in_array(strstr($ausgabe2[$i]->Name, "_",true), $kurse)))
@@ -347,7 +278,7 @@
                 }
               }
             sort($kurse,SORT_STRING);
-            for($j = 0; $j < count($kurse);$j++){
+            for($j = 0; $j < count($kurse);$j++){             
           // foreach ($kurse as $value) {
             echo '<div class="panel panel-default">';
               echo '<div class="panel-heading" role="tab" id="heading'.$kurse[$j].'">';
@@ -375,30 +306,54 @@
                         echo '<tr>';
                           echo '<th>Projekt</th>
                                 <th>ID</th>
-                                <th>l&ouml;schen</th>
-                                <th></th>';
+                                <th id="kursmitte">gestoppte Instanzen</th>
+                                <th id="kursmitte">aktive Instanzen</th>
+                                <th>l&ouml;schen</th>';                            
                           echo '</tr>';
                       echo '</head>'; 
                       echo '<body>';
-                        for($i = 0; $i < count($ausgabe2);$i++){
+                        for($d = 0; $d < count($ausgabe2);$d++){
+                           $zaehler1 = 0;
+                           $zaehler2 = 0;
                             /* $ausnahmen sind in der config.php gespeichert */
-                          if(!(in_array($ausgabe2[$i]->Name,$ausnahmen))){
-                            if(strcmp(strstr($ausgabe2[$i]->Name, "_",true), $kurse[$j]) == 0){
+                          if(!(in_array($ausgabe2[$d]->Name,$ausnahmen))){
+                            if(strcmp(strstr($ausgabe2[$d]->Name, "_",true), $kurse[$j]) == 0){
                               echo '<tr>';
-                                echo '<td>'.$ausgabe2[$i]->Name.'</td>';
-                                echo '<td>'.$ausgabe2[$i]->ID.'</td>';
+                                echo '<td>'.$ausgabe2[$d]->Name.'</td>';
+                                echo '<td>'.$ausgabe2[$d]->ID.'</td>';
+
+
+                                for($g = 0; $g < count($serverlist);$g++){
+                                 if($ausgabe2[$d]->Name == (explode("=",$serverlist[$g]->Networks)[0]) AND $serverlist[$g]->Status == "SUSPENDED"){
+                                    $zaehler1++;                    
+                                  } 
+                                 if($ausgabe2[$d]->Name == (explode("=",$serverlist[$g]->Networks)[0]) AND $serverlist[$g]->Status == "ACTIVE"){                      
+                                    $zaehler2++;                    
+                                  }                   
+                                }
+
+                                if($zaehler1 != 0){
+                                  echo '<td id="kursmitte">'.$zaehler1.'</td>'; //Zähler für gestoppte Instanzen
+                                } else {
+                                  echo '<td id="kursmitte">-</td>';
+                                }
+                                if($zaehler2 != 0){
+                                  echo '<td id="kursmitte">'.$zaehler2.'</td>'; //Zähler für aktive Instanzen
+                                } else {
+                                  echo '<td id="kursmitte">-</td>';
+                                }
                                 echo '<td>';
-                                echo '<button type="button" class="btn btn-default muelleimer project" id="'.$ausgabe2[$i]->ID.'">';
+                                echo '<button type="button" class="btn btn-default muelleimer project" id="'.$ausgabe2[$d]->ID.'">';
                                 echo '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
                                 echo '</button>';
-                                echo '</td>';
-                              echo '</tr>';
+                                echo '</td>';                                                    
                             }
                           }
-                        }
+                        }                      
+                        echo '</tr>';
                       echo '</body>';
                     echo '</table>';
-                  // echo '</div>';
+                  //echo '</div>';
                 echo '</div>';
               echo '</div>';
             echo '</div>';

@@ -8,8 +8,8 @@ import subprocess
 import sys
 
 #Einlesen der Parameter
-tenant_id = str(sys.argv[1]) #Parameter 1
-projekt = str(sys.argv[2]) #Parameter 2
+tenant_id = str(sys.argv[1]) #Eindeutige ID des Projekts
+projekt = str(sys.argv[2]) # Name des Projekts einlesen, um Router aehnlich zu benennen
 
 
 # #Tenant ID des Projekts auslesen

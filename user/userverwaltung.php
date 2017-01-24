@@ -57,38 +57,14 @@
           <a class="navbar-brand" href="../main.php">HSF-Stack Userverwaltung</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <!-- <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li> -->
-            <!-- <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li> 
-          </ul> -->
           <ul class="nav navbar-nav navbar-right">
-            <!-- <li><a href="#">Dashboard</a></li> -->
             <li><a href="../kurs.php">Kurs</a></li>
-            <!-- <li><a href="../projekt.php">Projekt</a></li>
-            <li><a href="../sicherheit.php">Sicherheit</a></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="userverwaltung.php"><span class="glyphicon glyphicon-wrench tool" aria-hidden=true></span> <?php echo $name ?></a></li>
-                <!-- <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li> -->
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <!-- <li><a href="#">Separated link</a></li> -->
-                <li><a href="../index.php">Logout <?php setcookie("", time()-3600); session_destroy(); ?></a></li>
+                <li><a href="../index.php">Logout</a></li>
               </ul>
             </li> 
           </ul>
@@ -99,12 +75,9 @@
     <div class="container">
     <div class="row">
     <div class="col-md-10">
-    <div class="col-md-2 col-md-offset-2 titel">
+    <div class="col-md-2 col-md-offset-4 titel">
 	<button type="button" class="btn btn-success btn-block neu" data-toggle="modal" data-target="#modaluseradd" ><span class="glyphicon glyphicon-plus gl" aria-hidden="true"></span>NEU</button>
   </div>
-     <!-- <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluseradd">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>NEU</strong>
-      </div>-->
         <!-- Modal NEU -->
             <div class="modal fade" id="modaluseradd" role="dialog" aria-labelledby="rasterSystemModalLabel">
               <div class="modal-dialog modal-lg" role="document">
@@ -190,16 +163,9 @@
           });
         </script>
         
-      <div class="col-md-3 col-md-offset-1 titel">
-      <button type="button" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-wrench gl" aria-hidden="true"></span>BEARBEITEN</button>
-        
-      </div>
       <div class="col-md-2 col-md-offset-1 titel">
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
-     <!-- <div class="col-md-2 col-md-offset-2 titel" data-toggle="modal" data-target="#modaluserdelete">
-        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> <strong>LÖSCHEN</strong>
-      </div> -->
 <!-- Modal NEU -->
             <div class="modal fade" id="modaluserdelete" role="dialog" aria-labelledby="rasterSystemModalLabel">
               <div class="modal-dialog modal-lg" role="document">

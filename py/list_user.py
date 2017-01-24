@@ -5,9 +5,7 @@ import subprocess
 import sys
 
 
-# Folgendes Skript legt ein neues Projekt an.
-# Jedes Projekt enthaelt am Ende eine Ziffer die
-# von einem uebergeordneten Skript uebergeben werden.
+# Folgendes Skript zeigt alle Nutzer an bzw. gibt diese im JSON-Format aus.
 
 
 #Ausfuehren des Linux Befehls

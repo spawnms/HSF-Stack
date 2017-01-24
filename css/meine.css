@@ -77,12 +77,22 @@ h2.schrift{
   margin-top:5px;
 }
 
-
+.ueberschrift-main{
+  text-align: center;
+}
 /*################### main.php ################################*/
 /* Farbpalette: http://paletton.com/#uid=52G0Y0ko0tBeuGUjGxdsKq3uOky */
 
 .tableabstand{
   margin-top: 50px;
+}
+
+.tableabstand td{
+    text-align: center;
+}
+
+.tableabstand th{
+    text-align: center !important; 
 }
 
 .gl{
@@ -130,6 +140,14 @@ margin-top:50px;
   color: #fff;
     background-color: #c9302c;
     border-color: #ac2925;
+}
+
+#kursmitte{
+  text-align: center;
+}
+
+.titel{
+  margin-bottom: 5px;
 }
 /*##############################################################*/
 

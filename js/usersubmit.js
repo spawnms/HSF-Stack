@@ -1,4 +1,3 @@
-
 $("button.submit").click(function(){
 //var name = $("#benutzername").val();
 //var passwd = $("#benutzerpasswd").val();

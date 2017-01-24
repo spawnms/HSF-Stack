@@ -9,6 +9,7 @@
     $name = $_SESSION['userid'];
     $string = "";
     $projekt_ID = array();
+    
 
     $shell = shell_exec("python py/list_project.py");
     $ausgabe = json_decode($shell);
@@ -20,9 +21,24 @@
     $usage = shell_exec("python py/usage2.py "); //$storage muss dann noch eingefügt werden
     $ausgabe2 = json_decode($usage);
 
+    $shell2 = shell_exec("python py/server_list.py");
+    $serverlist = json_decode($shell2);
+
+
     for ($k = 0;$k<count($ausgabe2);$k++){
       array_push($projekt_ID,$ausgabe2[$k]->Project);
     }
+
+    shell_exec('py/nova_bash.sh');
+      $datei = file_get_contents('py/test.txt');
+      $array = explode(",", $datei);
+      for($i = 0;$i < count($array);$i++){
+        if(!($i === 0) && !($i === count($array)-1)){
+          $ergebnis[$i]['Server_ID'] = trim(explode(":",$array[$i])[0]);
+          $ergebnis[$i]['Tenant_ID'] = trim(explode(":",$array[$i])[1]);
+          $ergebnis[$i]['Status'] = trim(explode(":",$array[$i])[2]);
+        }
+      }
 
   session_write_close();
 ?>
@@ -89,8 +105,8 @@
                 <!-- <li><a href="#">Another action</a></li> -->
                 <!-- <li><a href="#">Something else here</a></li> -->
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
+                <!-- <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li> -->
                   <li><a href="index.php">Logout </a></l>
               </ul>
             </li> 
@@ -112,30 +128,31 @@
       <button type="button" class="btn btn-block btn-danger del" data-toggle="modal" data-target="#modaluserdelete"><span class="glyphicon glyphicon-minus gl" aria-hidden="true"></span>L&Ouml;SCHEN</button>
       </div>
       </div> -->
+      <h2 class="ueberschrift-main">Verf&uuml;gbare Projekte</h2>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md-11">
           <table class="table table-hover tableabstand">
             <head>
                 <tr>
                     <th>Projektname</th>
-                   <!-- <th>Gr&oumlsse</th> -->
                     <th>aktiv</th>
-                    <th>laufende Server</th>
-                    <th></th>
+                    <th>vorhandene Instanzen</th>
+                    
                 </tr>
             </head> 
             <body>
                 <?php
               for($i = 0; $i < count($ausgabe);$i++){
                 if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
-                echo '<tr>
+                  echo '<tr>
                       <td>'.$ausgabe[$i]->Name.'</td>';
                    if($ausgabe[$i]->Enabled == 'true'){
-                echo '<td><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>';
-              } else {
-                echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>';
-              }
+                    echo '<td><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>';
+                  } else {
+                    echo '<td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>';
+                  }
+
                 if(!(in_array($ausgabe[$i]->Name,$ausnahmen)) && in_array($ausgabe[$i]->ID,$projekt_ID)){
                   for ($j = 0; $j < count($ausgabe2);$j++){
                     if($ausgabe[$i]->ID === $ausgabe2[$j]->Project){
@@ -145,13 +162,70 @@
                 } else {
                   echo '<td id="'.$ausgabe[$i]->ID.'"></td> </tr>';
                 }
+               }
               }
+                ?>
+            </body>   
+          </table>
+        </div>
+      </div> -->
+
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <table class="table table-hover tableabstand">
+            <head>
+                <tr>
+                    <th>Projektname</th>
+                    <th>gestoppte Instanzen</th>
+                    <th>aktive Instanzen</th>
+                    <th>Gesamt</th>
+                    
+                </tr>
+            </head> 
+            <body>
+                <?php
+              for($i = 0; $i < count($ausgabe);$i++){
+                $zaehler1 = 0;
+                $zaehler2 = 0;
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen))){
+                  echo '<tr><td>'.$ausgabe[$i]->Name.'</td>';
+                  
+                  for($j = 0; $j < count($serverlist);$j++){
+                   if($ausgabe[$i]->Name == (explode("=",$serverlist[$j]->Networks)[0]) AND $serverlist[$j]->Status == "SUSPENDED"){
+                      $zaehler1++;                    
+                    } 
+                   if($ausgabe[$i]->Name == (explode("=",$serverlist[$j]->Networks)[0]) AND $serverlist[$j]->Status == "ACTIVE"){                      
+                      $zaehler2++;                    
+                    }                   
+                  }
+                  if($zaehler1 != 0){
+                    echo '<td>'.$zaehler1.'</td>'; //Zähler für gestoppte Instanzen
+                  } else {
+                    echo '<td>-</td>';
+                  }
+                  if($zaehler2 != 0){
+                    echo '<td>'.$zaehler2.'</td>'; //Zähler für aktive Instanzen
+                  } else {
+                    echo '<td>-</td>';
+                  }
+                
+                if(!(in_array($ausgabe[$i]->Name,$ausnahmen)) && in_array($ausgabe[$i]->ID,$projekt_ID)){
+                  for ($j = 0; $j < count($ausgabe2);$j++){
+                    if($ausgabe[$i]->ID === $ausgabe2[$j]->Project){
+                      echo '<td id="'.$ausgabe[$i]->ID.'">'.$ausgabe2[$j]->Servers.'</tr>';
+                    }
+                }
+                } else {
+                  echo '<td id="'.$ausgabe[$i]->ID.'">-</td> </tr>';
+                }
+               }
               }
                 ?>
             </body>   
           </table>
         </div>
       </div>
+
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
