@@ -1,3 +1,5 @@
+// die Funktion loescht Kurse, also alle Projekte eines Kurses
+// es wird die Kursbezeichnung eingelesen und an die remove_course.php uebergeben
 $(function(){
 $("#submitloeschen").click(function(){
 	var kurs = $("#projektloeschen").val();

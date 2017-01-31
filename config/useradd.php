@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once("config.php");
-include("function.php");
 
 $name = $_SESSION['userid'];
 
@@ -22,4 +21,5 @@ if(isset($_SESSION['userid'])){
     header("Location:../user/userverwaltung.php?benutzerid=".$name);
     exit();
 }
+session_write_close();
 ?> 

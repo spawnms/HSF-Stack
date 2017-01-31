@@ -1,3 +1,4 @@
+// die Funktion loescht Projekte anhand ihrer ID
 $(function(){
 $(".project").click(function(){
 	var id = $(this).attr('id');

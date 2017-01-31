@@ -2,7 +2,6 @@
     session_start();
    // include("config/function.php");
     require_once ("../config/config.php");
-    include ("../config/function.php");
     error_reporting(E_ALL & ~E_NOTICE); // meldet alle Fehler ausser "Notice"
     // if(!isset($_SESSION['userid'])){
     //   header("Location:../index.php");
@@ -226,6 +225,7 @@
             url: "../config/userdel.php",
             data: $("form.formuserdelete").serialize(),
             success: function(msg){
+              location.reload();
               $("#modaluserdelete").modal('hide');
             },
             error: function(){

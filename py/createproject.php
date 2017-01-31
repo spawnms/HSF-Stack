@@ -17,9 +17,9 @@ $netzwerkausgabe = array();
 
 $schreiben = "Auswahl: ".$auswahl.", Name: ".$kurs.", Projekt: ".$projekt.", Netzwerk: ".$netzwerk.", SID: ".$sid;
 
-$test = fopen("createproject.log","c");
-fwrite($test,$schreiben);
-fclose($test);
+// $test = fopen("createproject.log","c");
+// fwrite($test,$schreiben);
+// fclose($test);
 
 
 $projectquery = $pdo->query("SELECT projekt FROM kurse");
