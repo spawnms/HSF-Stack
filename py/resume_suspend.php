@@ -11,7 +11,7 @@ $kurs->execute(array($kurs));
 $tenant = $kurs->fetchAll(PDO::FETCH_ASSOC);
 
  shell_exec('py/nova_bash.sh');
-    $datei = file_get_contents('py/test.txt');
+    $datei = file_get_contents('py/data.tmp');
     $array = explode(",", $datei);
     for($i = 0;$i < count($array);$i++){
      if(!($i === 0) && !($i === count($array)-1)){
