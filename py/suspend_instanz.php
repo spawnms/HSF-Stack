@@ -14,7 +14,7 @@ $stmt->execute(array($kurs));
 $jszuordnung = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	shell_exec("/var/www/html/HSF-git/HSF-Stack/py/nova_bash.sh");
-	$datei = file_get_contents('/var/www/html/HSF-git/HSF-Stack/py/data.tmp');
+	$datei = file_get_contents('data.tmp');
     $array = explode(",", $datei);
    for($i = 0;$i < count($array);$i++){
      if(!($i === 0) && !($i === count($array)-1)){
